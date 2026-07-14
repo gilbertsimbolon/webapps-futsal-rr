@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 class LupaPasswordController extends Controller
 {
     // fungsi show halaman kirim link reset
-    public function showHalamanLinkReset()
+    public function showHalamanLupaPassword()
     {
         return view('auth.lupa_password');
     }
