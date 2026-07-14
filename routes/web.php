@@ -19,6 +19,7 @@ Route::post('/register', [RegisterController::class, 'store'])->name('register.s
 
 // Route Lupa Password
 Route::get('/lupa-password', [LupaPasswordController::class, 'showHalamanLupaPassword'])->name('lupa-password.index');
+Route::post('/lupa-password', [LupaPasswordController::class, 'kirimLinkReset'])->name('lupa-password.kirim');
 
 // Route Reset Password
 Route::get('/reset-password', function() {
