@@ -22,7 +22,8 @@
                         <h4 class="mb-1 mt-3 text-center">Selamat Datang!</h4>
                         <p class="mb-6 text-center">Silahkan login terlebih dahulu.</p>
 
-                        <form id="formAuthentication" class="mb-6" action="index.html">
+                        <form id="formAuthentication" class="mb-6" action="{{ route('login.store') }}" method="POST">
+                            @csrf
                             <div class="mb-6">
                                 <label for="email" class="form-label">Email</label>
                                 <input type="text" class="form-control" id="email" name="email"
