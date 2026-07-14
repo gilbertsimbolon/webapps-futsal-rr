@@ -14,11 +14,11 @@
                 <a class="nav-link dropdown-toggle hide-arrow p-0" href="#" data-bs-toggle="dropdown">
                     <div class="text-end">
                         <h6 class="mb-0 fw-bold">
-                            {{ auth()->user()->name }}
+                            {{-- {{ auth()->user()->name }} --}}
                         </h6>
 
                         <small class="text-muted text-capitalize">
-                            {{ auth()->user()->getRoleNames()->first() }}
+                            {{-- {{ auth()->user()->getRoleNames()->first() }} --}}
                         </small>
                     </div>
                 </a>
@@ -27,7 +27,7 @@
                         <a class="dropdown-item" href="#">
                             <div class="d-flex">
                                 <div class="flex-grow-1">
-                                    <h6 class="mb-0 text-capitalize">{{ auth()->user()->name }}</h6>
+                                    {{-- <h6 class="mb-0 text-capitalize">{{ auth()->user()->name }}</h6> --}}
                                 </div>
                             </div>
                         </a>
