@@ -50,6 +50,12 @@ class LupaPasswordController extends Controller
         return back()->with('success', 'Kami telah mengirimkan link reset password ke email Anda.');
     }
 
+    // fungsi show halaman reset password
+    public function showHalamanResetPassword()
+    {
+        return view('auth.reset_password');
+    }
+
     // fungsi reset password
     public function resetPassword(Request $request)
     {

@@ -22,9 +22,7 @@ Route::get('/lupa-password', [LupaPasswordController::class, 'showHalamanLupaPas
 Route::post('/lupa-password', [LupaPasswordController::class, 'kirimLinkReset'])->name('lupa-password.kirim');
 
 // Route Reset Password
-Route::get('/reset-password', function() {
-    return view('auth.reset_password');
-});
+// Route::get('/reset-password', [LupaPassword])
 
 // Route Dashboard
 Route::get('/dashboard', function () {
