@@ -32,11 +32,11 @@
                             </div>
                         @endif
 
-                        <form id="formAuthentication" class="mb-6" action="#" method="POST">
+                        <form id="formAuthentication" class="mb-6" action="{{ route('reset-password.reset') }}" method="POST">
                             @csrf
 
-                            <input type="hidden" name="token" value="">
-                            <input type="hidden" name="email" value="">
+                            <input type="hidden" name="token" value="{{ $token }}">
+                            <input type="hidden" name="email" value="{{ $email }}">
 
                             <div class="mb-4 form-password-toggle">
                                 <label class="form-label" for="password">Password Baru</label>
