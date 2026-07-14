@@ -13,6 +13,12 @@ use Illuminate\Support\Str;
 
 class LupaPasswordController extends Controller
 {
+    // fungsi show halaman kirim link reset
+    public function showHalamanLinkReset()
+    {
+        return view('auth.lupa_password');
+    }
+
     // fungsi kirim link reset
     public function kirimLinkReset(Request $request)
     {

@@ -17,9 +17,6 @@ Route::get('/register', [RegisterController::class, 'index'])->name('register.in
 Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
 
 // Route Lupa Password
-Route::get('/lupa-password', function () {
-    return view('auth.lupa_password');
-});
 
 // Route Reset Password
 Route::get('/reset-password', function() {
