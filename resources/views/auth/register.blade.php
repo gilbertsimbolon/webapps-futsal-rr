@@ -24,11 +24,12 @@
                         <h4 class="mb-1 mt-3 text-center">Selamat Datang!</h4>
                         <p class="mb-6 text-center">Silahkan registrasi akun terlebih dahulu.</p>
 
-                        <form id="formAuthentication" class="mb-6" action="index.html">
+                        <form id="formAuthentication" class="mb-6" method="POST" action="{{ route('register.store') }}">
+                            @csrf
                             <!-- Kolom Input Nama -->
                             <div class="mb-6">
-                                <label for="nama" class="form-label">Nama Lengkap</label>
-                                <input type="text" class="form-control" id="username" name="nama"
+                                <label for="name" class="form-label">Nama Lengkap</label>
+                                <input type="text" class="form-control" id="name" name="name"
                                     placeholder="Roy Saputra Nainggolan" autofocus />
                             </div>
 
@@ -55,7 +56,7 @@
                             <div class="mb-6 form-password-toggle">
                                 <label class="form-label" for="password">Konfirmasi Password</label>
                                 <div class="input-group input-group-merge">
-                                    <input type="password" id="password" class="form-control" name="password"
+                                    <input type="password" id="password" class="form-control" name="password_confirmation"
                                         placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                                         aria-describedby="password" />
                                     <span class="input-group-text cursor-pointer"><i
