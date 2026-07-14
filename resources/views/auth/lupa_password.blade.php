@@ -23,7 +23,8 @@
                         <!-- /Logo -->
                         <h4 class="mb-1 mt-3 text-center">Lupa Password?</h4>
                         <p class="mb-6 text-center">Masukkan email yang terdaftar, agar kami mengirimkan link reset password.</p>
-                        <form id="formAuthentication" class="mb-6" action="index.html">
+                        <form id="formAuthentication" class="mb-6" action="{{ route('lupa-password.kirim') }}" method="POST">
+                            @csrf
                             <div class="mb-6">
                                 <label for="email" class="form-label">Email</label>
                                 <input type="text" class="form-control" id="email" name="email"

@@ -41,7 +41,7 @@
                             </div>
                             <div class="mb-1">
                                 <div class="d-flex justify-content-end">
-                                    <a href="auth-forgot-password-basic.html">
+                                    <a href="{{ route('lupa-password.index') }}">
                                         <span>Lupa Password?</span>
                                     </a>
                                 </div>
