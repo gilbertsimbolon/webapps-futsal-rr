@@ -53,7 +53,7 @@
 
                         <p class="text-center">
                             <span>Belum memiliki akun?</span>
-                            <a href="auth-register-basic.html">
+                            <a href="{{ route('register.index') }}">
                                 <span>Registrasi</span>
                             </a>
                         </p>

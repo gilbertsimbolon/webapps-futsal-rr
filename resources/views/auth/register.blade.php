@@ -70,7 +70,7 @@
 
                         <p class="text-center">
                             <span>Sudah memiliki akun?</span>
-                            <a href="auth-login-basic.html">
+                            <a href="{{ route('login.index') }}">
                                 <span>Login</span>
                             </a>
                         </p>
