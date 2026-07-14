@@ -51,9 +51,12 @@ class LupaPasswordController extends Controller
     }
 
     // fungsi show halaman reset password
-    public function showHalamanResetPassword()
+    public function showHalamanResetPassword($token, $email)
     {
-        return view('auth.reset_password');
+        return view('auth.reset_password', [
+            'token' => $token,
+            'email' => $email
+        ]);
     }
 
     // fungsi reset password
