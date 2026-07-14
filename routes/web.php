@@ -16,6 +16,11 @@ Route::post('/login', [LoginController::class, 'store'])->name('login.store');
 Route::get('/register', [RegisterController::class, 'index'])->name('register.index');
 Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
 
+// Route Lupa Password
+Route::get('/lupa-password', function () {
+    return view('auth.lupa_password');
+});
+
 // Route Dashboard
 Route::get('/dashboard', function () {
     return view('layouts.app');
