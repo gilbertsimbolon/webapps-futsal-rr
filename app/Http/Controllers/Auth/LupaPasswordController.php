@@ -41,7 +41,7 @@ class LupaPasswordController extends Controller
         ]);
 
         // kirim email
-        Mail::send('emails.forget-password', ['token' => $token, 'email' => $request->email], function ($message) use($request) {
+        Mail::send('emails.lupa-password', ['token' => $token, 'email' => $request->email], function ($message) use($request) {
             $message->to($request->email);
             $message->subject('Notifikasi Reset Password');
         });
