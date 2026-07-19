@@ -12,7 +12,7 @@
                         <small class="text-body float-end">Detail informasi akun Anda.</small>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('profile.update') }}" method="POST">
+                        <form action="{{ route('profil.update') }}" method="POST">
                             @csrf
                             <div class="mb-6">
                                 <label class="form-label" for="basic-icon-default-fullname">Nama Lengkap</label>
