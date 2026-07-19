@@ -31,7 +31,12 @@ Route::post('/reset-password', [LupaPasswordController::class, 'resetPassword'])
 Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 
 // Route Profil
-Route::get('/profil', [ProfilController::class, 'index'])->name('profile.index');
+Route::prefix('profil')->group(function () {
+    // Halaman Profil
+    Route::get('/', [ProfilController::class, 'index'])->name('profil.index');
+    // Edit Data Profil
+    Route::post('/', [ProfilController::class, 'update'])->name('profil.update');
+});
 
 // Route Dashboard
 Route::get('/dashboard', function () {
