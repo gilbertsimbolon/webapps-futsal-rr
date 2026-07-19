@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class ProfilController extends Controller
 {
@@ -30,5 +31,37 @@ class ProfilController extends Controller
         $user->save();
 
         return redirect()->back()->with('success', 'Profil berhasil diperbarui.');
-    }   
+    }
+
+    // fungsi ganti password
+    public function updatePassword(Request $request)
+    {
+        // validasi password
+        $request->validate([
+            'current_password' => ['required'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $user = Auth::user();
+
+        // validasi password lama
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors([
+                'current_password' => 'Password lama tidak sesuai.'
+            ]);
+        }
+
+        // validasi agar password baru tidak sama dengan password lama
+        if (Hash::check($request->password, $user->password)) {
+            return back()->withErrors([
+                'password' => 'Password baru tidak boleh sama dengan password lama.'
+            ]);
+        }
+
+        // simpan password baru
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        return back()->with('success', 'Password berhasil diubah.');
+    }
 }
