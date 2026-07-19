@@ -106,9 +106,6 @@
                                 <button class="btn btn-primary" type="submit">
                                     Ganti Password
                                 </button>
-                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
-                                    Hapus Akun
-                                </button>
                             </div>
 
                         </form>
