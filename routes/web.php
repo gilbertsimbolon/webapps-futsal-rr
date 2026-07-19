@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\LupaPasswordController;
 use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,9 @@ Route::post('/lupa-password', [LupaPasswordController::class, 'kirimLinkReset'])
 // Route Reset Password
 Route::get('/reset-password/{token}/{email}', [LupaPasswordController::class, 'showHalamanResetPassword'])->name('reset-password.index');
 Route::post('/reset-password', [LupaPasswordController::class, 'resetPassword'])->name('reset-password.reset');
+
+// Route Logout
+Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 
 // Route Dashboard
 Route::get('/dashboard', function () {
