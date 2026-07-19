@@ -63,7 +63,7 @@
                         <small class="text-body float-end">Detail keamanan akun Anda.</small>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('profile.password.update') }}" method="POST">
+                        <form action="{{ route('profil.update.password') }}" method="POST">
                             @csrf
 
                             <div class="mb-6 form-password-toggle">
