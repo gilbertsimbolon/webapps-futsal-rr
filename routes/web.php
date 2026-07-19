@@ -36,6 +36,7 @@ Route::prefix('profil')->group(function () {
     Route::get('/', [ProfilController::class, 'index'])->name('profil.index');
     // Edit Data Profil
     Route::post('/', [ProfilController::class, 'update'])->name('profil.update');
+    Route::post('/', [ProfilController::class, 'updatePassword'])->name('profil.update.password');
 });
 
 // Route Dashboard
