@@ -33,7 +33,7 @@
                                     <input type="text" id="basic-icon-default-company"
                                         class="form-control text-capitalize bg-body-secondary" placeholder="ACME Inc."
                                         aria-label="ACME Inc." aria-describedby="basic-icon-default-company2"
-                                        value={{ auth()->user()->getRoleNames()->first() }} disabled />
+                                        value='Admin' disabled />
                                 </div>
                             </div>
 
@@ -112,7 +112,7 @@
                             </div>
 
                         </form>
-                        @include('partials.modals.profile.delete')
+                        
                     </div>
                 </div>
             </div>
