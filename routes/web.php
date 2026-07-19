@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\LupaPasswordController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\ProfilController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -28,6 +29,9 @@ Route::post('/reset-password', [LupaPasswordController::class, 'resetPassword'])
 
 // Route Logout
 Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
+
+// Route Profil
+Route::get('/profil', [ProfilController::class, 'index'])->name('profile.index');
 
 // Route Dashboard
 Route::get('/dashboard', function () {
