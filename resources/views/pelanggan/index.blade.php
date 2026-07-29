@@ -6,12 +6,6 @@
     <div class="card">
         <div class="d-flex justify-content-between">
             <h5 class="card-header">Manajemen Pelanggan</h5>
-
-            <div class="demo-inline-spacing me-3">
-                <button type="button" class="btn btn-icon btn-primary">
-                    <span class="icon-base bx bx-plus icon-md"></span>
-                </button>
-            </div>
         </div>
 
         <div class="table-responsive text-nowrap">
@@ -65,6 +59,7 @@
                                 </a>
                             </td>
                         </tr>
+                        @include('pelanggan.modals.delete')
                     @empty
                         <tr>
                             <td colspan="5" class="text-center py-4">
@@ -74,7 +69,6 @@
                     @endforelse
                 </tbody>
             </table>
-            @include('pelanggan.modals.delete')
         </div>
     </div>
 @endsection

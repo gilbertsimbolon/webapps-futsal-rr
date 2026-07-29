@@ -20,7 +20,7 @@
 
     <ul class="menu-inner py-1">
 
-        {{-- Dashboard --}}
+        <!-- Dashboard -->
         <li class="menu-item">
             <a href="{{ route('dashboard') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
@@ -28,7 +28,7 @@
             </a>
         </li>
 
-        {{-- Master Data --}}
+        <!-- Master Data -->
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Master Data</span>
         </li>
