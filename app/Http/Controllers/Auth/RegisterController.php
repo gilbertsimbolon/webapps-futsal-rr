@@ -34,11 +34,13 @@ class RegisterController extends Controller
         ]);
 
         // jika validasi data berhasil
-        User::create([
+        $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
         ]);
+
+        $user->assignRole('pelanggan');
 
         // kembalikan ke halaman login
         return redirect()->route('login.index')->with('success', 'Registrasi berhasil! Silakan login.');
