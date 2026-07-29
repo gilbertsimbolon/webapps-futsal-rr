@@ -2,7 +2,8 @@
     <div class="app-brand demo">
         <a href="/" class="app-brand-link gap-1">
             <span class="app-brand-logo demo">
-                <img src="{{ asset('img/logo.png') }}" style="width:40px;height:auto;object-fit:contain;">
+                <img src="{{ asset('img/logo.png') }}"
+                    style="width:40px;height:auto;object-fit:contain;">
             </span>
 
             <span class="app-brand-text demo text-heading fw-bold">
@@ -16,93 +17,62 @@
     </div>
 
     <div class="menu-divider mt-0"></div>
-
     <div class="menu-inner-shadow"></div>
 
     <ul class="menu-inner py-1">
 
+        {{-- Dashboard --}}
         <li class="menu-item">
-            <a href="#" class="menu-link">
+            <a href="{{ route('dashboard') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div>Dashboard</div>
             </a>
         </li>
 
-        <!-- Master Data -->
+        {{-- Master Data --}}
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Master Data</span>
         </li>
 
         <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-data"></i>
-                <div>Master Data</div>
+            <a href="{{ route('pelanggan.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-user"></i>
+                <div>Pelanggan</div>
             </a>
-
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="{{ route('pengguna.index') }}" class="menu-link">
-                        <div>Pengguna</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="#" class="menu-link">
-                        <div>Pemilik Lapangan</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="#" class="menu-link">
-                        <div>Metode Pembayaran</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="#" class="menu-link">
-                        <div>Manajemen Cabang</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="#" class="menu-link">
-                        <div>Manajemen Lapangan</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
-
-        <!-- Transaksi -->
-        <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">Transaksi</span>
         </li>
 
         <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-cart"></i>
-                <div>Transaksi</div>
+            <a href="" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-user"></i>
+                <div>Pemilik</div>
             </a>
-
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="#" class="menu-link">
-                        <div>POS / Kasir</div>
-                    </a>
-                </li>
-
-                <li class="menu-item">
-                    <a href="#" class="menu-link">
-                        <div>Riwayat Penjualan</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
-
-        <!-- Pengaturan -->
-        <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">Pengaturan</span>
         </li>
 
         <li class="menu-item">
             <a href="#" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-cog"></i>
-                <div>Pengaturan</div>
+                <i class="menu-icon tf-icons bx bx-building-house"></i>
+                <div>Cabang</div>
+            </a>
+        </li>
+
+        <li class="menu-item">
+            <a href="#" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-football"></i>
+                <div>Lapangan</div>
+            </a>
+        </li>
+
+        <li class="menu-item">
+            <a href="#" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-calendar"></i>
+                <div>Jadwal</div>
+            </a>
+        </li>
+
+        <li class="menu-item">
+            <a href="#" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-credit-card"></i>
+                <div>Metode Pembayaran</div>
             </a>
         </li>
 

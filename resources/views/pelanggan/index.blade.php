@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Manajemen Pengguna | bkngftsl.')
+@section('title', 'Manajemen Pelanggan | bkngftsl.')
 
 @section('content')
     <div class="card">
-        <h5 class="card-header">Manajemen Pengguna</h5>
+        <h5 class="card-header">Manajemen Pelanggan</h5>
         <div class="table-responsive text-nowrap">
             @foreach ($pengguna as $p)
                 <table class="table table-hover">

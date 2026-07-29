@@ -4,7 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\LupaPasswordController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\PenggunaController;
+use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\ProfilController;
 use Illuminate\Support\Facades\Route;
 
@@ -47,5 +47,5 @@ Route::middleware('auth')->group(function () {
     })->name('dashboard');
 
     // Route Manajemen Pengguna
-    Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna.index');
+    Route::get('/pelanggan', [PelangganController::class, 'index'])->name('pelanggan.index');
 });
