@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\LupaPasswordController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\PelangganController;
+use App\Http\Controllers\PemilikController;
 use App\Http\Controllers\ProfilController;
 use Illuminate\Support\Facades\Route;
 
@@ -53,4 +54,7 @@ Route::middleware('auth')->group(function () {
     ->name('pelanggan.status');
     // Route Hapus Akun Pelanggan
     Route::delete('/pelanggan/{id}', [PelangganController::class, 'destroy'])->name('pelanggan.delete');
+
+    // Route Manajemen Pemilik
+    Route::get('/pemilik', [PemilikController::class, 'index'])->name('pemilik.index');
 });
