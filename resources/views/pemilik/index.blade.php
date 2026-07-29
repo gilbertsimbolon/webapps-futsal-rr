@@ -5,7 +5,7 @@
 @section('content')
     <div class="card">
         <div class="d-flex justify-content-between">
-            <h5 class="card-header">Manajemen Pelanggan</h5>
+            <h5 class="card-header">Manajemen Pemilik</h5>
 
             <div class="demo-inline-spacing me-3">
                 <button type="button" class="btn btn-icon btn-primary">
@@ -27,7 +27,7 @@
                 </thead>
 
                 <tbody class="table-border-bottom-0">
-                    @forelse ($pelanggan as $p)
+                    @forelse ($pemilik as $p)
                         <tr>
                             <!-- Nomor -->
                             <td class="text-center">
@@ -42,7 +42,7 @@
 
                             <!-- Status -->
                             <td class="text-center">
-                                <form action="{{ route('pelanggan.status', $p) }}" method="POST">
+                                <form action="{{ route('pemilik.status', $p) }}" method="POST">
                                     @csrf
                                     @method('PATCH')
 
@@ -60,7 +60,7 @@
                             <!-- Aksi -->
                             <td class="text-center">
                                 <a class="dropdown-item text-danger" href="#" data-bs-toggle="modal"
-                                    data-bs-target="#hapusPelanggan{{ $p->id }}">
+                                    data-bs-target="#hapusPemilik{{ $p->id }}">
                                     <i class="bx bx-trash me-1"></i>
                                 </a>
                             </td>
@@ -74,7 +74,7 @@
                     @endforelse
                 </tbody>
             </table>
-            @include('pelanggan.modals.delete')
+            @include('pemilik.modals.delete')
         </div>
     </div>
 @endsection
