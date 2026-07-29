@@ -22,7 +22,7 @@
                         <th>Nama</th>
                         <th>Email</th>
                         <th class="text-center">Status Akun</th>
-                        <th style="width: 20px" class="text-center">Aksi</th>
+                        <th style="width: 50px" class="text-center">Aksi</th>
                     </tr>
                 </thead>
 
@@ -42,33 +42,26 @@
 
                             <!-- Status -->
                             <td class="text-center">
-                                @if ($p->status === 'aktif')
-                                    <span class="badge bg-label-success">Aktif</span>
-                                @else
-                                    <span class="badge bg-label-danger">Nonaktif</span>
-                                @endif
+                                <form action="{{ route('pelanggan.status', $p) }}" method="POST">
+                                    @csrf
+                                    @method('PATCH')
+
+                                    <div class="form-check form-switch d-inline-flex align-items-center">
+                                        <input class="form-check-input me-2" type="checkbox" name="status"
+                                            onchange="this.form.submit()" {{ $p->status === 'aktif' ? 'checked' : '' }}>
+
+                                        <span class="{{ $p->status === 'aktif' ? 'text-success' : 'text-danger' }}">
+                                            {{ ucfirst($p->status) }}
+                                        </span>
+                                    </div>
+                                </form>
                             </td>
 
                             <!-- Aksi -->
                             <td class="text-center">
-                                <div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                        data-bs-toggle="dropdown">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </button>
-
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="#">
-                                            <i class="bx bx-edit-alt me-1"></i>
-                                            Edit
-                                        </a>
-
-                                        <a class="dropdown-item" href="#">
-                                            <i class="bx bx-trash me-1"></i>
-                                            Hapus
-                                        </a>
-                                    </div>
-                                </div>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bx bx-trash me-1"></i>
+                                </a>
                             </td>
                         </tr>
                     @empty

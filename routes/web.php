@@ -48,4 +48,7 @@ Route::middleware('auth')->group(function () {
 
     // Route Manajemen Pengguna
     Route::get('/pelanggan', [PelangganController::class, 'index'])->name('pelanggan.index');
+    // Route Update Status Akun
+    Route::patch('/pelanggan/{pelanggan}/status', [PelangganController::class, 'updateStatus'])
+    ->name('pelanggan.status');
 });
