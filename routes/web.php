@@ -59,5 +59,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/pemilik', [PemilikController::class, 'index'])->name('pemilik.index');
     // Route Update Status Akun
     Route::patch('/pemilik/{pemilik}/status', [PemilikController::class, 'updateStatus'])->name('pemilik.status');
-    
+    // Route Hapus Akun Pemilik
+    Route::delete('/pemilik/{id}', [PemilikController::class, 'destroy'])->name('pemilik.delete');
 });
