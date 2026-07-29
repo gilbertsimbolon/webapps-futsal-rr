@@ -8,14 +8,11 @@
         <div class="table-responsive text-nowrap">
             <table class="table table-hover">
                 <thead>
-                    <tr>
+                    <tr class="text-center">
                         <th style="width: 10px" class="text-center">No</th>
                         <th>Nama</th>
                         <th>Email</th>
-                        <th>No. HP/WhatsApp</th>
-                        <th>Jenis Kelamin</th>
-                        <th>Alamat</th>
-                        <th>Status</th>
+                        <th>Status Akun</th>
                         <th style="width: 20px" class="text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -34,23 +31,8 @@
                             albertcook@gmail.com
                         </td>
 
-                        <!-- No. HP/WhatsApp -->
-                        <td>
-                            6285399681237
-                        </td>
-
-                        <!-- Jenis Kelamin -->
-                        <td>
-                            <span class="badge bg-label-primary me-1">Laki-Laki</span>
-                        </td>
-
-                        <!-- Alamat -->
-                        <td>
-                            Lorong Bengkel, Tataaran II
-                        </td>
-
                         <!-- Status Akun -->
-                        <td>
+                        <td class="text-center">
                             <span class="badge bg-label-primary me-1">Active</span>
                         </td>
 
