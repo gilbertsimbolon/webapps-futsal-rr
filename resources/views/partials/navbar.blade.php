@@ -18,8 +18,7 @@
                         </h6>
 
                         <small class="text-muted text-capitalize">
-                            Admin
-                            {{-- {{ auth()->user()->getRoleNames()->first() }} ?? 'Admin' --}}
+                            {{ auth()->user()->getRoleNames()->first() }}
                         </small>
                     </div>
                 </a>
@@ -38,7 +37,7 @@
                     </li>
                     <li>
                         <a class="dropdown-item" href="{{ route('profil.index') }}">
-                            <i class="icon-base bx bx-user icon-md me-3"></i><span>My Profile</span>
+                            <i class="icon-base bx bx-user icon-md me-3"></i><span>Profil Saya</span>
                         </a>
                     </li>
                     <li>
