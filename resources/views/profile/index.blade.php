@@ -3,13 +3,17 @@
 @section('title', 'Profil | bkngftsl.')
 
 @section('content')
-    <div class="row min-vh-100">
-        <div class="col-6 h-100">
+    <div class="row">
+        <div class="col-12 col-md-6 h-100 py-2">
             <div class="col-xl">
                 <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Informasi Akun</h5>
-                        <small class="text-body float-end">Detail informasi akun Anda.</small>
+                    <div
+                        class="card-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+                        <h5 class="mb-1 mb-md-0">Informasi Akun</h5>
+
+                        <small class="text-body">
+                            Detail informasi akun Anda.
+                        </small>
                     </div>
                     <div class="card-body">
                         <form action="{{ route('profil.update') }}" method="POST">
@@ -55,12 +59,15 @@
             </div>
         </div>
 
-        <div class="col-6 h-100">
+        <div class="col-12 col-md-6 h-100 py-2">
             <div class="col-xl">
                 <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Keamanan</h5>
-                        <small class="text-body float-end">Detail keamanan akun Anda.</small>
+                    <div class="card-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+                        <h5 class="mb-1 mb-md-0">Keamanan</h5>
+
+                        <small class="text-body">
+                            Detail keamanan akun Anda.
+                        </small>
                     </div>
                     <div class="card-body">
                         <form action="{{ route('profil.update.password') }}" method="POST">
@@ -109,7 +116,7 @@
                             </div>
 
                         </form>
-                        
+
                     </div>
                 </div>
             </div>
