@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\LupaPasswordController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\ProfilController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,19 +28,24 @@ Route::post('/lupa-password', [LupaPasswordController::class, 'kirimLinkReset'])
 Route::get('/reset-password/{token}/{email}', [LupaPasswordController::class, 'showHalamanResetPassword'])->name('reset-password.index');
 Route::post('/reset-password', [LupaPasswordController::class, 'resetPassword'])->name('reset-password.reset');
 
-// Route Logout
-Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
+Route::middleware('auth')->group(function () {
+    // Route Logout
+    Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
+    
+    // Route Profil
+    Route::prefix('profil')->group(function () {
+        // Halaman Profil
+        Route::get('/', [ProfilController::class, 'index'])->name('profil.index');
+        // Edit Data Profil
+        Route::post('/update', [ProfilController::class, 'update'])->name('profil.update');
+        Route::post('/password', [ProfilController::class, 'updatePassword'])->name('profil.update.password');
+    });
+    
+    // Route Dashboard
+    Route::get('/dashboard', function () {
+        return view('layouts.app');
+    })->name('dashboard');
 
-// Route Profil
-Route::prefix('profil')->group(function () {
-    // Halaman Profil
-    Route::get('/', [ProfilController::class, 'index'])->name('profil.index');
-    // Edit Data Profil
-    Route::post('/update', [ProfilController::class, 'update'])->name('profil.update');
-    Route::post('/password', [ProfilController::class, 'updatePassword'])->name('profil.update.password');
+    // Route Manajemen Pengguna
+    Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna.index');
 });
-
-// Route Dashboard
-Route::get('/dashboard', function () {
-    return view('layouts.app');
-})->name('dashboard');

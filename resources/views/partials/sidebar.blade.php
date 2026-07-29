@@ -41,7 +41,7 @@
 
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a href="" class="menu-link">
+                    <a href="{{ route('pengguna.index') }}" class="menu-link">
                         <div>Pengguna</div>
                     </a>
                 </li>
