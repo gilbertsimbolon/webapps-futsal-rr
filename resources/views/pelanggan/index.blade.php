@@ -4,7 +4,15 @@
 
 @section('content')
     <div class="card">
-        <h5 class="card-header">Manajemen Pelanggan</h5>
+        <div class="d-flex justify-content-between">
+            <h5 class="card-header">Manajemen Pelanggan</h5>
+
+            <div class="demo-inline-spacing me-3">
+                <button type="button" class="btn btn-icon btn-primary">
+                    <span class="icon-base bx bx-plus icon-md"></span>
+                </button>
+            </div>
+        </div>
 
         <div class="table-responsive text-nowrap">
             <table class="table table-hover">
