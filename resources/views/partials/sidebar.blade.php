@@ -6,7 +6,7 @@
             </span>
 
             <span class="app-brand-text demo text-heading fw-bold">
-                bolonsite
+                bkngftsl.
             </span>
         </a>
 
@@ -42,12 +42,12 @@
             <ul class="menu-sub">
                 <li class="menu-item">
                     <a href="" class="menu-link">
-                        <div>Kategori Menu</div>
+                        <div>Pengguna</div>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a href="#" class="menu-link">
-                        <div>Menu</div>
+                        <div>Pemilik Lapangan</div>
                     </a>
                 </li>
                 <li class="menu-item">
@@ -57,12 +57,12 @@
                 </li>
                 <li class="menu-item">
                     <a href="#" class="menu-link">
-                        <div>Customer</div>
+                        <div>Manajemen Cabang</div>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a href="#" class="menu-link">
-                        <div>Pegawai</div>
+                        <div>Manajemen Lapangan</div>
                     </a>
                 </li>
             </ul>

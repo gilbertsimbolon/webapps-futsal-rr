@@ -21,10 +21,6 @@ class LoginController extends Controller
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required|string',
-        ], [
-            'email.required' => 'Email wajib diisi! Silahkan coba lagi.',
-            'email.email' => 'Format email tidak valid! Silahkan coba lagi.',
-            'password.required' => 'Password wajib diisi! Silahkan coba lagi.',
         ]);
 
         // proses autentikasi jika berhasil
