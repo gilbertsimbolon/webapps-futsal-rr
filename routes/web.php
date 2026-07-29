@@ -57,4 +57,7 @@ Route::middleware('auth')->group(function () {
 
     // Route Manajemen Pemilik
     Route::get('/pemilik', [PemilikController::class, 'index'])->name('pemilik.index');
+    // Route Update Status Akun
+    Route::patch('/pemilik/{pemilik}/status', [PemilikController::class, 'updateStatus'])->name('pemilik.status');
+    
 });
