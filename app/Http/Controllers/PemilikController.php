@@ -14,4 +14,14 @@ class PemilikController extends Controller
 
         return view('pemilik.index', compact('pemilik'));
     }
+
+    // fungsi untuk
+    public function updateStatus(User $pemilik)
+    {
+        $pemilik->update([
+            'status' => $pemilik->status === 'aktif' ? 'nonaktif' : 'aktif',
+        ]);
+
+        return back()->with('success', 'Status akun berhasil diperbarui.');
+    }
 }

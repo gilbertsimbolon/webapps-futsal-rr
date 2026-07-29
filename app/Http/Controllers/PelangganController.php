@@ -15,7 +15,7 @@ class PelangganController extends Controller
         return view('pelanggan.index', compact('pelanggan'));
     }
 
-    // fungsi untuk menghapus akun
+    // fungsi untuk update status akun
     public function updateStatus(User $pelanggan)
     {
         $pelanggan->update([
