@@ -24,4 +24,14 @@ class PemilikController extends Controller
 
         return back()->with('success', 'Status akun berhasil diperbarui.');
     }
+
+    // fungsi hapus akun
+    public function destroy(Request $request, string $id)
+    {
+        $pemilik = User::findOrFail($id);
+
+        $pemilik->delete();
+
+        return redirect()->route('pemilik.index')->with('success', 'Akun berhasil dihapus.');
+    }
 }
