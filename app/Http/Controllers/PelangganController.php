@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Request;
 
 class PelangganController extends Controller
 {
@@ -24,5 +25,15 @@ class PelangganController extends Controller
         ]);
 
         return back()->with('success', 'Status akun berhasil diperbarui.');
+    }
+
+    // fungsi menghapus akun
+    public function destroy(Request $request, string $id)
+    {
+        $user = User::findOrFail($id);
+
+        $user->delete();
+
+        return redirect()->route('pelanggan.index')->with('success', 'Akun berhasil dihapus.');
     }
 }

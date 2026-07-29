@@ -51,4 +51,6 @@ Route::middleware('auth')->group(function () {
     // Route Update Status Akun
     Route::patch('/pelanggan/{pelanggan}/status', [PelangganController::class, 'updateStatus'])
     ->name('pelanggan.status');
+    // Route Hapus Akun Pelanggan
+    Route::delete('/pelanggan/{id}', [PelangganController::class, 'destroy'])->name('pelanggan.delete');
 });

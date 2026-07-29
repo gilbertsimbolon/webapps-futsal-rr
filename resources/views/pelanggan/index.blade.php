@@ -59,7 +59,8 @@
 
                             <!-- Aksi -->
                             <td class="text-center">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item text-danger" href="#" data-bs-toggle="modal"
+                                    data-bs-target="#hapusPelanggan{{ $p->id }}">
                                     <i class="bx bx-trash me-1"></i>
                                 </a>
                             </td>
@@ -73,6 +74,7 @@
                     @endforelse
                 </tbody>
             </table>
+            @include('pelanggan.modals.delete')
         </div>
     </div>
 @endsection
