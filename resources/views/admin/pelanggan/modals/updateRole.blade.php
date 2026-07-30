@@ -6,7 +6,7 @@
                 <h5 class="modal-title">Konfirmasi Ubah Role</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('pelanggan.update-role', $p->id) }}" method="POST">
+            <form action="{{ route('admin.pelanggan.update-role', $p->id) }}" method="POST">
                 @csrf
                 @method('PUT')
                 <div class="modal-body">

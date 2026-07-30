@@ -1,7 +1,7 @@
 <!-- Modal Hapus -->
-<div class="modal fade" id="hapusPemilik{{ $p->id }}" tabindex="-1" aria-hidden="true" data-bs-dismiss="modal">
+<div class="modal fade" id="hapusPelanggan{{ $p->id }}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <form action="{{ route('pemilik.delete', $p) }}" method="POST">
+        <form action="{{ route('admin.pelanggan.delete', $p) }}" method="POST">
             @csrf
             @method('DELETE')
 
@@ -10,7 +10,7 @@
                 <div class="modal-header">
                     <h5 class="modal-title text-danger">
                         <i class="bx bx-trash me-1"></i>
-                        Hapus Pemilik
+                        Hapus Pelanggan
                     </h5>
 
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -20,7 +20,7 @@
 
                     <div class="alert alert-warning mb-4">
                         <i class="bx bx-error-circle me-1"></i>
-                        Data pemilik yang dihapus tidak dapat dikembalikan.
+                        Data pelanggan yang dihapus tidak dapat dikembalikan.
                     </div>
 
                     <h6 class="mb-3">Detail Akun</h6>
@@ -78,7 +78,7 @@
                     </table>
 
                     <p class="mb-0">
-                        Apakah Anda yakin ingin menghapus akun pemilik
+                        Apakah Anda yakin ingin menghapus akun pelanggan
                         <strong>{{ $p->name }}</strong>?
                     </p>
 
@@ -95,7 +95,7 @@
                     <button type="submit"
                         class="btn btn-danger">
                         <i class="bx bx-trash me-1"></i>
-                        Hapus Pemilik
+                        Hapus Pelanggan
                     </button>
 
                 </div>

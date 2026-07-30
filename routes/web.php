@@ -1,11 +1,11 @@
 <?php
 
+use App\Http\Controllers\Admin\PelangganController;
+use App\Http\Controllers\Admin\PemilikController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\LupaPasswordController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\PelangganController;
-use App\Http\Controllers\PemilikController;
 use App\Http\Controllers\ProfilController;
 use Illuminate\Support\Facades\Route;
 

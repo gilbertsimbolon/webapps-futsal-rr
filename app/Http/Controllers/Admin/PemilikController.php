@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,7 @@ class PemilikController extends Controller
     {
         $pemilik = User::role('pemilik')->get();
 
-        return view('pemilik.index', compact('pemilik'));
+        return view('admin.pemilik.index', compact('pemilik'));
     }
 
     // fungsi untuk
@@ -32,6 +33,6 @@ class PemilikController extends Controller
 
         $pemilik->delete();
 
-        return redirect()->route('pemilik.index')->with('success', 'Akun berhasil dihapus.');
+        return redirect()->route('admin.pemilik.index')->with('success', 'Akun berhasil dihapus.');
     }
 }

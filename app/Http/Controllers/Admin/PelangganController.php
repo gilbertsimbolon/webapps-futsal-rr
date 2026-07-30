@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -13,7 +14,7 @@ class PelangganController extends Controller
     {
         $pelanggan = User::role('pelanggan')->get();
 
-        return view('pelanggan.index', compact('pelanggan'));
+        return view('admin.pelanggan.index', compact('pelanggan'));
     }
 
     // fungsi untuk update status akun
@@ -35,7 +36,7 @@ class PelangganController extends Controller
 
         $pelanggan->delete();
 
-        return redirect()->route('pelanggan.index')->with('success', 'Akun berhasil dihapus.');
+        return redirect()->route('admin.pelanggan.index')->with('success', 'Akun berhasil dihapus.');
     }
 
     // fungsi mengupdate role akun

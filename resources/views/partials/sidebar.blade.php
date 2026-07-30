@@ -20,61 +20,66 @@
 
     <ul class="menu-inner py-1">
 
-        <!-- Dashboard -->
-        <li class="menu-item">
-            <a href="{{ route('dashboard') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                <div>Dashboard</div>
-            </a>
-        </li>
+        @hasrole('admin')
+            <!-- Dashboard -->
+            <li class="menu-item">
+                <a href="{{ route('admin.dashboard') }}" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                    <div>Dashboard</div>
+                </a>
+            </li>
 
-        <!-- Master Data -->
-        <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">Master Data</span>
-        </li>
+            <!-- Master Data -->
+            <li class="menu-header small text-uppercase">
+                <span class="menu-header-text">Master Data</span>
+            </li>
 
-        <li class="menu-item">
-            <a href="{{ route('pelanggan.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-user"></i>
-                <div>Pelanggan</div>
-            </a>
-        </li>
+            <li class="menu-item">
+                <a href="{{ route('admin.pelanggan.index') }}" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-user"></i>
+                    <div>Pelanggan</div>
+                </a>
+            </li>
 
-        <li class="menu-item">
-            <a href="{{ route('pemilik.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-user"></i>
-                <div>Pemilik</div>
-            </a>
-        </li>
+            <li class="menu-item">
+                <a href="{{ route('admin.pemilik.index') }}" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-user"></i>
+                    <div>Pemilik</div>
+                </a>
+            </li>
 
-        <li class="menu-item">
-            <a href="#" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-building-house"></i>
-                <div>Cabang</div>
-            </a>
-        </li>
+            <li class="menu-item">
+                <a href="#" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-building-house"></i>
+                    <div>Cabang</div>
+                </a>
+            </li>
 
-        <li class="menu-item">
-            <a href="#" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-football"></i>
-                <div>Lapangan</div>
-            </a>
-        </li>
+            <li class="menu-item">
+                <a href="#" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-football"></i>
+                    <div>Lapangan</div>
+                </a>
+            </li>
 
-        <li class="menu-item">
-            <a href="#" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-calendar"></i>
-                <div>Jadwal</div>
-            </a>
-        </li>
+            <li class="menu-item">
+                <a href="#" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-calendar"></i>
+                    <div>Jadwal</div>
+                </a>
+            </li>
 
-        <li class="menu-item">
-            <a href="#" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-credit-card"></i>
-                <div>Metode Pembayaran</div>
-            </a>
-        </li>
+            <li class="menu-item">
+                <a href="#" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-credit-card"></i>
+                    <div>Metode Pembayaran</div>
+                </a>
+            </li>
+        @endhasrole
 
+        @hasrole('pemilik')
+            
+        @endhasrole()
     </ul>
 
     <div class="mt-auto border-top p-3">

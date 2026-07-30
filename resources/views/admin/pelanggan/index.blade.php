@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Manajemen Pemilik | bkngftsl.')
+@section('title', 'Manajemen Pelanggan | bkngftsl.')
 
 @section('content')
     <div class="card">
         <div class="d-flex justify-content-between">
-            <h5 class="card-header">Manajemen Pemilik</h5>
+            <h5 class="card-header">Manajemen Pelanggan</h5>
         </div>
 
         <div class="table-responsive text-nowrap">
@@ -16,12 +16,12 @@
                         <th>Nama</th>
                         <th>Email</th>
                         <th class="text-center">Status Akun</th>
-                        <th style="width: 50px" class="text-center">Aksi</th>
+                        <th style="width: 60px;" class="text-center">Aksi</th>
                     </tr>
                 </thead>
 
                 <tbody class="table-border-bottom-0">
-                    @forelse ($pemilik as $p)
+                    @forelse ($pelanggan as $p)
                         <tr>
                             <!-- Nomor -->
                             <td class="text-center">
@@ -36,7 +36,7 @@
 
                             <!-- Status -->
                             <td class="text-center">
-                                <form action="{{ route('pemilik.status', $p) }}" method="POST">
+                                <form action="{{ route('admin.pelanggan.status', $p) }}" method="POST">
                                     @csrf
                                     @method('PATCH')
 
@@ -53,16 +53,24 @@
 
                             <!-- Aksi -->
                             <td class="text-center">
-                                <a class="dropdown-item text-danger" href="#" data-bs-toggle="modal"
-                                    data-bs-target="#hapusPemilik{{ $p->id }}">
+                                <!-- Tombol Hapus Pelanggan -->
+                                <a class="btn btn-sm btn-icon text-danger" href="#" data-bs-toggle="modal"
+                                    data-bs-target="#hapusPelanggan{{ $p->id }}">
                                     <i class="bx bx-trash me-1"></i>
                                 </a>
+
+                                <!-- Tombol Ubah Role ke Pemilik -->
+                                <a class="btn btn-sm btn-icon text-primary" href="#" data-bs-toggle="modal"
+                                    data-bs-target="#ubahRoleModal{{ $p->id }}" title="Ubah Role ke Pemilik">
+                                    <i class="bx bx-user-check"></i>
+                                </a>
                             </td>
+
                         </tr>
                     @empty
                         <tr>
                             <td colspan="5" class="text-center py-4">
-                                Belum ada data pemilik.
+                                Belum ada data pelanggan.
                             </td>
                         </tr>
                     @endforelse
@@ -70,5 +78,8 @@
             </table>
         </div>
     </div>
-    @include('pemilik.modals.delete')
+    @foreach ($pelanggan as $p)
+        @include('admin.pelanggan.modals.delete')
+        @include('admin.pelanggan.modals.updateRole')
+    @endforeach
 @endsection
