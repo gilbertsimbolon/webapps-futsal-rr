@@ -59,7 +59,6 @@
                                 </a>
                             </td>
                         </tr>
-                        @include('pelanggan.modals.delete')
                     @empty
                         <tr>
                             <td colspan="5" class="text-center py-4">
@@ -69,6 +68,7 @@
                     @endforelse
                 </tbody>
             </table>
+            @include('pelanggan.modals.delete')
         </div>
     </div>
 @endsection
