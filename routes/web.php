@@ -32,7 +32,7 @@ Route::post('/reset-password', [LupaPasswordController::class, 'resetPassword'])
 Route::middleware('auth')->group(function () {
     // Route Logout
     Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
-    
+
     // Route Profil
     Route::prefix('profil')->group(function () {
         // Halaman Profil
@@ -41,7 +41,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/update', [ProfilController::class, 'update'])->name('profil.update');
         Route::post('/password', [ProfilController::class, 'updatePassword'])->name('profil.update.password');
     });
-    
+
     // Route Dashboard
     Route::get('/dashboard', function () {
         return view('layouts.app');
@@ -54,6 +54,9 @@ Route::middleware('auth')->group(function () {
     ->name('pelanggan.status');
     // Route Hapus Akun Pelanggan
     Route::delete('/pelanggan/{id}', [PelangganController::class, 'destroy'])->name('pelanggan.delete');
+    // Route Update Role Akun
+    Route::put('/users/{id}/update-role', [PelangganController::class, 'updateRole'])->name('pelanggan.update-role');
+
 
     // Route Manajemen Pemilik
     Route::get('/pemilik', [PemilikController::class, 'index'])->name('pemilik.index');

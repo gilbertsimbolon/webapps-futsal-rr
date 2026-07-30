@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
+
 
 class PelangganController extends Controller
 {
@@ -35,5 +36,19 @@ class PelangganController extends Controller
         $pelanggan->delete();
 
         return redirect()->route('pelanggan.index')->with('success', 'Akun berhasil dihapus.');
+    }
+
+    // fungsi mengupdate role akun
+    public function updateRole(Request $request, string $id)
+    {
+        $request->validate([
+            'role' => 'required|exists:roles,name',
+        ]);
+
+        $user = User::findOrFail($id);
+
+        $user->syncRoles($request->role);
+
+        return redirect()->back()->with('success', "Role {$user->name} berhasil diubah menjadi {$request->role}!");
     }
 }

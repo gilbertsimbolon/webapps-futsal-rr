@@ -16,7 +16,7 @@
                         <th>Nama</th>
                         <th>Email</th>
                         <th class="text-center">Status Akun</th>
-                        <th style="width: 50px" class="text-center">Aksi</th>
+                        <th style="width: 60px;" class="text-center">Aksi</th>
                     </tr>
                 </thead>
 
@@ -53,11 +53,19 @@
 
                             <!-- Aksi -->
                             <td class="text-center">
-                                <a class="dropdown-item text-danger" href="#" data-bs-toggle="modal"
+                                <!-- Tombol Hapus Pelanggan -->
+                                <a class="btn btn-sm btn-icon text-danger" href="#" data-bs-toggle="modal"
                                     data-bs-target="#hapusPelanggan{{ $p->id }}">
                                     <i class="bx bx-trash me-1"></i>
                                 </a>
+
+                                <!-- Tombol Ubah Role ke Pemilik -->
+                                <a class="btn btn-sm btn-icon text-primary" href="#" data-bs-toggle="modal"
+                                    data-bs-target="#ubahRoleModal{{ $p->id }}" title="Ubah Role ke Pemilik">
+                                    <i class="bx bx-user-check"></i>
+                                </a>
                             </td>
+
                         </tr>
                     @empty
                         <tr>
@@ -68,7 +76,10 @@
                     @endforelse
                 </tbody>
             </table>
-            @include('pelanggan.modals.delete')
         </div>
     </div>
+    @foreach ($pelanggan as $p)
+        @include('pelanggan.modals.delete')
+        @include('pelanggan.modals.updateRole')
+    @endforeach
 @endsection

@@ -1,5 +1,5 @@
 <!-- Modal Hapus -->
-<div class="modal fade" id="hapusPemilik{{ $p->id }}" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="hapusPemilik{{ $p->id }}" tabindex="-1" aria-hidden="true" data-bs-dismiss="modal">
     <div class="modal-dialog modal-dialog-centered">
         <form action="{{ route('pemilik.delete', $p) }}" method="POST">
             @csrf
