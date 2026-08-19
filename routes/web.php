@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CabangController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PelangganController;
 use App\Http\Controllers\Admin\PemilikController;
@@ -67,7 +68,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::delete('/pemilik/{id}', [PemilikController::class, 'destroy'])->name('pemilik.delete');
 
     // Route Cabang
-    Route::get('/cabang', function () {
-        return view('admin.cabang.index');
-    })->name('cabang.index');
+    Route::get('/cabang', [CabangController::class, 'index'])->name('cabang.index');
+    Route::get('/cabang/1', function () {
+        return view('admin.cabang.show');
+    });
 });
