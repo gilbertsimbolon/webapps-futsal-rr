@@ -1,13 +1,20 @@
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
     <div class="app-brand demo">
-        <a href="/" class="app-brand-link gap-1">
+        <a href="/" class="app-brand-link gap-2">
             <span class="app-brand-logo demo">
                 <img src="{{ asset('img/logo.png') }}" style="width:40px;height:auto;object-fit:contain;">
             </span>
 
-            <span class="app-brand-text demo text-heading fw-bold">
-                bkngftsl.
-            </span>
+            <div class="d-flex flex-column">
+                <span class="app-brand-text text-heading fw-bold">
+                    bkngftsl.
+                </span>
+
+                <div class="lh-sm mt-1">
+                    <div id="current-date" class="text-muted" style="font-size: 11px;"></div>
+                    <div id="current-time" class="text-primary fw-semibold" style="font-size: 11px;"></div>
+                </div>
+            </div>
         </a>
 
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
@@ -103,3 +110,33 @@
 
     </div>
 </aside>
+<script>
+    function updateDateTime() {
+        const now = new Date();
+
+        const dateOptions = {
+            weekday: 'long',
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric',
+            timeZone: 'Asia/Makassar'
+        };
+
+        const timeOptions = {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+            timeZone: 'Asia/Makassar'
+        };
+
+        const date = new Intl.DateTimeFormat('id-ID', dateOptions).format(now);
+        const time = new Intl.DateTimeFormat('id-ID', timeOptions).format(now);
+
+        document.getElementById('current-date').textContent = date;
+        document.getElementById('current-time').textContent = time + ' WITA';
+    }
+
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+</script>
