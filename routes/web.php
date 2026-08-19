@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PelangganController;
 use App\Http\Controllers\Admin\PemilikController;
 use App\Http\Controllers\Auth\LoginController;
@@ -46,9 +47,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     // Route Dashboard
-    Route::get('/dashboard', function () {
-        return view('layouts.app');
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Route Manajemen Pengguna
     Route::get('/pelanggan', [PelangganController::class, 'index'])->name('pelanggan.index');
@@ -66,4 +65,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::patch('/pemilik/{pemilik}/status', [PemilikController::class, 'updateStatus'])->name('pemilik.status');
     // Route Hapus Akun Pemilik
     Route::delete('/pemilik/{id}', [PemilikController::class, 'destroy'])->name('pemilik.delete');
+
+    // Route Cabang
+    Route::get('/cabang', function () {
+        return view('admin.cabang.index');
+    });
 });
