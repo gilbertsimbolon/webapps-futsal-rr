@@ -72,4 +72,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/cabang/1', function () {
         return view('admin.cabang.show');
     });
+
+    // Route Lapangan
+    Route::get('/lapangan', function () {
+        return view('admin.lapangan.index');
+    });
 });
