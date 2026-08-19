@@ -66,13 +66,6 @@
                 <div>Lapangan</div>
             </a>
         </li>
-
-        <li class="menu-item">
-            <a href="#" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-calendar"></i>
-                <div>Jadwal</div>
-            </a>
-        </li>
     </ul>
 
     <div class="mt-auto border-top p-3">
