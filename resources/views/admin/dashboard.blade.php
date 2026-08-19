@@ -5,7 +5,8 @@
 @section('content')
     <div class="col-12 w-full">
         <div class="row">
-            <div class="col-6 mb-3">
+            <!-- Kartu Total Pemilik Lapangan -->
+            <div class="col-4 mb-3">
                 <div class="card h-100 border-0 shadow-sm">
                     <div class="card-body">
 
@@ -49,7 +50,38 @@
                 </div>
             </div>
 
-            <div class="col-6 mb-3">
+            <!-- Kartu Total Pengguna Sistem -->
+            <div class="col-4 mb-3">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <div class="avatar">
+                                <span class="avatar-initial rounded bg-label-primary">
+                                    <i class="bx bx-user fs-3"></i>
+                                </span>
+                            </div>
+
+                        </div>
+
+                        <div>
+                            <span class="text-muted small fw-medium">
+                                TOTAL PENGGUNA SISTEM
+                            </span>
+
+                            <div class="d-flex align-items-end justify-content-between mt-2">
+                                <h2 class="mb-0 fw-bold">
+                                    {{ $users }} Orang.
+                                </h2>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kartu Total Penyewa Sistem -->
+            <div class="col-4 mb-3">
                 <div class="card h-100 border-0 shadow-sm">
                     <div class="card-body">
 
@@ -68,15 +100,9 @@
 
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li>
-                                        <a class="dropdown-item" href="javascript:void(0);">
+                                        <a class="dropdown-item" href="{{route('admin.pelanggan.index')}}">
                                             <i class="bx bx-show me-2"></i>
                                             Lihat Detail
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="javascript:void(0);">
-                                            <i class="bx bx-edit me-2"></i>
-                                            Kelola
                                         </a>
                                     </li>
                                 </ul>
@@ -85,12 +111,12 @@
 
                         <div>
                             <span class="text-muted small fw-medium">
-                                TOTAL PEMILIK LAPANGAN
+                                TOTAL PELANGGAN
                             </span>
 
                             <div class="d-flex align-items-end justify-content-between mt-2">
                                 <h2 class="mb-0 fw-bold">
-                                    {{ $owners }} Orang.
+                                    {{ $tenants }} Orang.
                                 </h2>
                             </div>
                         </div>

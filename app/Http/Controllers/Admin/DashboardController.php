@@ -13,7 +13,9 @@ class DashboardController extends Controller
     {
         // mengambil jumlah pemilik dari tabel users dengan role 'pemilik'
         $owners = User::role('pemilik')->count();
+        $users = User::all()->count();
+        $tenants = User::role('pelanggan')->count();
 
-        return view('admin.dashboard', compact('owners'));
+        return view('admin.dashboard', compact('owners', 'users', 'tenants'));
     }
 }
