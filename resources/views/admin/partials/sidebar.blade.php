@@ -54,7 +54,7 @@
         </li>
 
         <li class="menu-item">
-            <a href="#" class="menu-link">
+            <a href="{{ route('admin.cabang.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-building-house"></i>
                 <div>Cabang</div>
             </a>

@@ -69,5 +69,5 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     // Route Cabang
     Route::get('/cabang', function () {
         return view('admin.cabang.index');
-    });
+    })->name('cabang.index');
 });
