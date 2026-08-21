@@ -1,9 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\CabangController;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\PelangganController;
-use App\Http\Controllers\Admin\PemilikController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\LupaPasswordController;
@@ -46,35 +42,6 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
-    // Route Dashboard
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-    // Route Manajemen Pengguna
-    Route::get('/pelanggan', [PelangganController::class, 'index'])->name('pelanggan.index');
-    // Route Update Status Akun
-    Route::patch('/pelanggan/{pelanggan}/status', [PelangganController::class, 'updateStatus'])
-    ->name('pelanggan.status');
-    // Route Hapus Akun Pelanggan
-    Route::delete('/pelanggan/{id}', [PelangganController::class, 'destroy'])->name('pelanggan.delete');
-    // Route Update Role Akun
-    Route::put('/users/{id}/update-role', [PelangganController::class, 'updateRole'])->name('pelanggan.update-role');
-
-    // Route Manajemen Pemilik
-    Route::get('/pemilik', [PemilikController::class, 'index'])->name('pemilik.index');
-    // Route Update Status Akun
-    Route::patch('/pemilik/{pemilik}/status', [PemilikController::class, 'updateStatus'])->name('pemilik.status');
-    // Route Hapus Akun Pemilik
-    Route::delete('/pemilik/{id}', [PemilikController::class, 'destroy'])->name('pemilik.delete');
-
-    // Route Cabang
-    Route::get('/cabang', [CabangController::class, 'index'])->name('cabang.index');
-    Route::get('/cabang/1', function () {
-        return view('admin.cabang.show');
-    });
-
-    // Route Lapangan
-    Route::get('/lapangan', function () {
-        return view('admin.lapangan.index');
-    });
+Route::get('/tes', function () {
+    return view('welcome');
 });
