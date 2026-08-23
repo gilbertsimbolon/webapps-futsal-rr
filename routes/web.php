@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\LupaPasswordController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\ProfilController;
 use Illuminate\Support\Facades\Route;
 
@@ -41,4 +42,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/', function () {
         return view('welcome');
     })->name('dashboard');
+
+    // Route Manajemen Pengguna
+    Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna.index');
+    Route::post('/pengguna', [PenggunaController::class, 'store'])->name('pengguna.store');
+    Route::put('/pengguna/{user}', [PenggunaController::class, 'update'])->name('pengguna.update');
+    Route::delete('/pengguna/{user}', [PenggunaController::class, 'destroy'])->name('pengguna.destroy');
+    Route::patch('/pengguna/{user}/toggle-status', [PenggunaController::class, 'toggleStatus'])->name('pengguna.toggle-status');
 });

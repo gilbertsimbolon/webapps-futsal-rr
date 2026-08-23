@@ -204,7 +204,7 @@
         </li>
 
         <li class="menu-item">
-            <a href="#" class="menu-link px-3">
+            <a href="{{ route('pengguna.index') }}" class="menu-link px-3">
                 <i class="menu-icon tf-icons bx bx-user-check"></i>
                 <div data-i18n="Manajemen User">Manajemen Pengguna</div>
             </a>
