@@ -37,14 +37,7 @@ class LoginController extends Controller
                 return back()->withErrors(['email' => 'Akun Anda sedang dinonaktifkan. Silakan hubungi admin.']);
             }
 
-            // Kondisi berdasarkan role.
-            if ($user->hasRole('admin')) {
-                return redirect()->route('admin.dashboard');
-            } elseif ($user->hasRole('pemilik')) {
-                // return redirect()->route('pemilik.dashboard');
-            } else {
-                // return redirect()->route('pelanggan.dashboard');
-            }
+            return redirect()->route('dashboard');
         }
 
         // jika gagal

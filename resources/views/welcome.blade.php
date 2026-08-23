@@ -3,5 +3,7 @@
 @section('title', 'Dashboard | bkngftsl.')
 
 @section('content')
-    <h1>test</h1>
+    <div class="">
+        <h1>testing page</h1>
+    </div>
 @endsection

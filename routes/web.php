@@ -7,10 +7,6 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProfilController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 // Route Login
 Route::get('/login', [LoginController::class, 'index'])->name('login.index');
 Route::post('/login', [LoginController::class, 'store'])->name('login.store');
@@ -40,8 +36,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/update', [ProfilController::class, 'update'])->name('profil.update');
         Route::post('/password', [ProfilController::class, 'updatePassword'])->name('profil.update.password');
     });
-});
 
-Route::get('/tes', function () {
-    return view('welcome');
+    // Route Dashboard
+    Route::get('/', function () {
+        return view('welcome');
+    })->name('dashboard');
 });
