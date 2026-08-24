@@ -214,7 +214,7 @@
 
     <!-- Menu User -->
     <div class="p-3 border-top mt-auto flex-shrink-0 bg-menu-theme w-100 position-sticky bottom-0" style="z-index: 10;">
-        <a href="#" class="d-flex align-items-center text-decoration-none text-heading p-2 rounded hover-light mb-2 w-100" title="{{ auth()->user()?->name ?? 'Pengguna' }}">
+        <a href="{{ route('profil.index') }}" class="d-flex align-items-center text-decoration-none text-heading p-2 rounded hover-light mb-2 w-100" title="{{ auth()->user()?->name ?? 'Pengguna' }}">
             <div class="avatar avatar-sm me-2 flex-shrink-0">
                 <span class="avatar-initial rounded-circle bg-label-primary fw-bold">
                     {{ strtoupper(substr(auth()->user()?->name ?? 'U', 0, 1)) }}

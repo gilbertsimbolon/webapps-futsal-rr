@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 // use Database\Factories\UserFactory;
+use App\Models\Branch;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -32,8 +33,8 @@ class User extends Authenticatable
     }
 
     // relasi user ke cabang
-    public function cabangs()
+    public function branches()
     {
-        return $this->hasMany(Cabang::class); 
+        return $this->hasMany(Branch::class);
     }
 }
