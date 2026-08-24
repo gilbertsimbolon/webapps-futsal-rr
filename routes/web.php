@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\LupaPasswordController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\CabangController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\ProfilController;
 use Illuminate\Support\Facades\Route;
@@ -49,4 +50,11 @@ Route::middleware('auth')->group(function () {
     Route::put('/pengguna/{user}', [PenggunaController::class, 'update'])->name('pengguna.update');
     Route::delete('/pengguna/{user}', [PenggunaController::class, 'destroy'])->name('pengguna.destroy');
     Route::patch('/pengguna/{user}/toggle-status', [PenggunaController::class, 'toggleStatus'])->name('pengguna.toggle-status');
+
+    // Route Cabang
+    Route::get('/cabang', [CabangController::class, 'index'])->name('cabang.index');
+    Route::post('/cabang', [CabangController::class, 'store'])->name('cabang.store');
+    Route::put('/cabang/{branch}', [CabangController::class, 'update'])->name('cabang.update');
+    Route::delete('/cabang/{branch}', [CabangController::class, 'destroy'])->name('cabang.destroy');
+    Route::patch('/cabang/{branch}/toggle-status', [CabangController::class, 'toggleStatus'])->name('cabang.toggle-status');
 });

@@ -1,0 +1,295 @@
+@extends('layouts.app')
+
+@section('title', 'Data Cabang | bkngftsl.')
+
+@section('content')
+<!-- Header Halaman -->
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
+    <div>
+        <h4 class="fw-bold mb-1">Data Cabang</h4>
+        <p class="text-muted mb-0 small">Kelola data cabang venue futsal yang terdaftar pada sistem.</p>
+    </div>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCreateBranch">
+        <i class="bx bx-plus me-1"></i> Tambah Cabang
+    </button>
+</div>
+
+<!-- Card Utama -->
+<div class="card border-0 shadow-sm">
+    <!-- Card Header: Title & Search Bar -->
+    <div class="card-header bg-white py-3 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 border-bottom">
+        <h5 class="mb-0 fw-bold">Daftar Cabang</h5>
+        <form action="{{ route('cabang.index') }}" method="GET" class="m-0" style="min-width: 280px;">
+            <div class="input-group input-group-merge">
+                <span class="input-group-text"><i class="bx bx-search"></i></span>
+                <input type="text" name="search" class="form-control" placeholder="Cari nama atau alamat..." value="{{ request('search') }}">
+            </div>
+        </form>
+    </div>
+
+    <!-- Table Responsive -->
+    <div class="table-responsive text-nowrap">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 60px;">NO</th>
+                    <th>NAMA CABANG</th>
+                    <th>PEMILIK / OWNER</th>
+                    <th>KONTAK (WA)</th>
+                    <th>ALAMAT</th>
+                    <th>STATUS</th>
+                    <th class="text-center" style="width: 120px;">AKSI</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($branches as $index => $branch)
+                    <tr>
+                        <td>{{ $branches->firstItem() + $index }}</td>
+                        <td>
+                            <span class="fw-bold text-dark">{{ $branch->branch_name }}</span>
+                            @if ($branch->description)
+                                <br><small class="text-muted">{{ Str::limit($branch->description, 35) }}</small>
+                            @endif
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar avatar-xs me-2 flex-shrink-0">
+                                    <span class="avatar-initial rounded-circle bg-label-info fw-bold" style="font-size: 10px;">
+                                        {{ strtoupper(substr($branch->user?->name ?? 'P', 0, 1)) }}
+                                    </span>
+                                </div>
+                                <span class="small fw-semibold text-muted">{{ $branch->user?->name ?? '-' }}</span>
+                            </div>
+                        </td>
+                        <td>{{ $branch->phone }}</td>
+                        <td class="text-wrap" style="max-width: 280px;">{{ $branch->address }}</td>
+                        <td>
+                            <!-- Form Toggle Switch Status -->
+                            <form id="form-toggle-branch-{{ $branch->id }}" action="{{ route('cabang.toggle-status', $branch->id) }}" method="POST" class="m-0">
+                                @csrf
+                                @method('PATCH')
+                                <div class="form-check form-switch m-0 d-inline-block">
+                                    <input class="form-check-input btn-toggle-branch" type="checkbox" role="switch"
+                                        data-branch-name="{{ $branch->branch_name }}"
+                                        data-current-status="{{ $branch->status }}"
+                                        data-form-id="form-toggle-branch-{{ $branch->id }}"
+                                        {{ $branch->status === 'active' ? 'checked' : '' }}
+                                        style="cursor: pointer; width: 2.5em; height: 1.3em;">
+                                </div>
+                            </form>
+                        </td>
+                        <td class="text-center">
+                            <div class="d-inline-flex gap-1">
+                                <!-- Tombol Modal Edit -->
+                                <button type="button" class="btn btn-icon btn-sm btn-outline-warning"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modalEditBranch{{ $branch->id }}"
+                                    title="Edit Cabang">
+                                    <i class="bx bx-pencil"></i>
+                                </button>
+
+                                <!-- Tombol Modal Hapus -->
+                                <button type="button" class="btn btn-icon btn-sm btn-outline-danger"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modalDeleteBranch{{ $branch->id }}"
+                                    title="Hapus Cabang">
+                                    <i class="bx bx-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="7" class="text-center py-5">
+                            <div class="d-flex flex-column align-items-center justify-content-center">
+                                <div class="avatar avatar-md bg-label-secondary mb-2 rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="bx bx-building-house fs-3 text-secondary"></i>
+                                </div>
+                                <h6 class="text-secondary mb-1">Tidak ada data cabang yang ditemukan.</h6>
+                                <p class="text-muted small mb-0">Klik tombol Tambah Cabang untuk menambahkan cabang baru.</p>
+                            </div>
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    @if ($branches->hasPages())
+        <div class="card-footer d-flex justify-content-end pb-0 border-top bg-white">
+            {{ $branches->links() }}
+        </div>
+    @endif
+</div>
+
+<!-- ================= MODAL TAMBAH CABANG ================= -->
+<div class="modal fade" id="modalCreateBranch" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <form class="modal-content" action="{{ route('cabang.store') }}" method="POST">
+            @csrf
+            <div class="modal-header">
+                <h5 class="modal-title">Tambah Cabang Baru</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Nama Cabang <span class="text-danger">*</span></label>
+                    <input type="text" name="branch_name" class="form-control" placeholder="Contoh: Arena Futsal Pusat" value="{{ old('branch_name') }}" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Pemilik / Penanggung Jawab</label>
+                    <select name="user_id" class="form-select">
+                        <option value="">-- Tetapkan Pemilik (Opsional) --</option>
+                        @foreach ($owners as $owner)
+                            <option value="{{ $owner->id }}" {{ old('user_id') == $owner->id ? 'selected' : '' }}>
+                                {{ $owner->name }} ({{ $owner->email }})
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Nomor WhatsApp / Telp <span class="text-danger">*</span></label>
+                    <input type="text" name="phone" class="form-control" placeholder="08xxxxxxxxxx" value="{{ old('phone') }}" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Alamat Lengkap <span class="text-danger">*</span></label>
+                    <textarea name="address" class="form-control" rows="3" placeholder="Masukkan alamat lengkap..." required>{{ old('address') }}</textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Deskripsi / Fasilitas</label>
+                    <textarea name="description" class="form-control" rows="2" placeholder="Parkir luas, toilet, kantin, loker...">{{ old('description') }}</textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Status Operasional <span class="text-danger">*</span></label>
+                    <select name="status" class="form-select" required>
+                        <option value="active" {{ old('status', 'active') == 'active' ? 'selected' : '' }}>Aktif</option>
+                        <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Nonaktif</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-primary">Simpan Cabang</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ================= MODAL EDIT & DELETE (DI LUAR TABEL) ================= -->
+@foreach ($branches as $branch)
+    <!-- Modal Edit Cabang -->
+    <div class="modal fade" id="modalEditBranch{{ $branch->id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <form class="modal-content" action="{{ route('cabang.update', $branch->id) }}" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Cabang: {{ $branch->branch_name }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nama Cabang <span class="text-danger">*</span></label>
+                        <input type="text" name="branch_name" class="form-control" value="{{ old('branch_name', $branch->branch_name) }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Pemilik / Penanggung Jawab</label>
+                        <select name="user_id" class="form-select">
+                            <option value="">-- Tetapkan Pemilik (Opsional) --</option>
+                            @foreach ($owners as $owner)
+                                <option value="{{ $owner->id }}" {{ old('user_id', $branch->user_id) == $owner->id ? 'selected' : '' }}>
+                                    {{ $owner->name }} ({{ $owner->email }})
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Nomor WhatsApp / Telp <span class="text-danger">*</span></label>
+                        <input type="text" name="phone" class="form-control" value="{{ old('phone', $branch->phone) }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Alamat Lengkap <span class="text-danger">*</span></label>
+                        <textarea name="address" class="form-control" rows="3" required>{{ old('address', $branch->address) }}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Deskripsi / Fasilitas</label>
+                        <textarea name="description" class="form-control" rows="2">{{ old('description', $branch->description) }}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Status Operasional <span class="text-danger">*</span></label>
+                        <select name="status" class="form-select" required>
+                            <option value="active" {{ old('status', $branch->status) == 'active' ? 'selected' : '' }}>Aktif</option>
+                            <option value="inactive" {{ old('status', $branch->status) == 'inactive' ? 'selected' : '' }}>Nonaktif</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Konfirmasi Hapus Cabang -->
+    <div class="modal fade" id="modalDeleteBranch{{ $branch->id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <form class="modal-content" action="{{ route('cabang.destroy', $branch->id) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <div class="modal-header">
+                    <h5 class="modal-title">Konfirmasi Hapus Cabang</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center py-4">
+                    <i class="bx bx-error-circle text-danger display-3 mb-2"></i>
+                    <h5 class="mb-1">Yakin ingin menghapus cabang ini?</h5>
+                    <p class="text-muted mb-0">
+                        Cabang <strong>{{ $branch->branch_name }}</strong> beserta seluruh data lapangan di dalamnya akan dihapus secara permanen.
+                    </p>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-danger">Ya, Hapus Data</button>
+                </div>
+            </form>
+        </div>
+    </div>
+@endforeach
+@endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Switch Toggle Status Cabang
+    document.querySelectorAll('.btn-toggle-branch').forEach(checkbox => {
+        checkbox.addEventListener('change', function (e) {
+            e.preventDefault();
+            const formId = this.getAttribute('data-form-id');
+            const branchName = this.getAttribute('data-branch-name');
+            const currentStatus = this.getAttribute('data-current-status');
+            const newStatusIndo = (currentStatus === 'active') ? 'nonaktif' : 'aktif';
+
+            // Reset visual toggle sementara sebelum konfirmasi
+            this.checked = (currentStatus === 'active');
+
+            Swal.fire({
+                title: 'Ubah Status Cabang?',
+                text: `Ubah status operasional cabang "${branchName}" menjadi ${newStatusIndo}?`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#696cff',
+                cancelButtonColor: '#8592a3',
+                confirmButtonText: 'Ya, Ubah',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById(formId).submit();
+                }
+            });
+        });
+    });
+});
+</script>
+@endpush
