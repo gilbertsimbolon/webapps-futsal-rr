@@ -143,8 +143,8 @@
             </a>
         </li>
 
-        <li class="menu-item">
-            <a href="#" class="menu-link px-3">
+        <li class="menu-item {{ request()->routeIs('bookings.*') ? 'active' : '' }}">
+            <a href="{{ route('bookings.index') }}" class="menu-link px-3">
                 <i class="menu-icon tf-icons bx bx-calendar-check"></i>
                 <div data-i18n="Booking Masuk">Booking Masuk Lapangan</div>
             </a>
