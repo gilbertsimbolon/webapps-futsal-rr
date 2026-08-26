@@ -129,8 +129,8 @@
             </a>
         </li>
 
-        <li class="menu-item">
-            <a href="#" class="menu-link px-3">
+        <li class="menu-item {{ request()->routeIs('lapangan.*') ? 'active' : '' }}">
+            <a href="{{ route('lapangan.index') }}" class="menu-link px-3">
                 <i class="menu-icon tf-icons bx bx-layer"></i>
                 <div data-i18n="Data Lapangan">Data Lapangan</div>
             </a>
