@@ -17,7 +17,13 @@ class Branch extends Model
         'phone',
         'address',
         'description',
+        'facilities',
         'status',
+    ];
+
+    // mengkonversi json ke array
+    protected $casts = [
+        'facilities' => 'array',
     ];
 
     // membuat slug otomatis
