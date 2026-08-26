@@ -40,19 +40,24 @@ class LapanganController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'branch_id'      => 'required|exists:branches,id',
-            'field_name'     => 'required|string|max:255',
-            'field_type'     => 'required|in:sintetis,vinyl,interlock,matras,semen',
-            'price_per_hour' => 'required|numeric|min:0',
-            'image'          => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'description'    => 'nullable|string',
-            'status'         => 'required|in:available,maintenance,inactive',
+            'branch_id'        => 'required|exists:branches,id',
+            'field_name'       => 'required|string|max:255',
+            'field_type'       => 'required|in:sintetis,vinyl,interlock,matras,semen',
+            'price_per_hour'   => 'required|numeric|min:0',
+            'image'            => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'description'      => 'nullable|string',
+            'specifications'   => 'nullable|array',
+            'specifications.*' => 'string|max:150',
+            'status'           => 'required|in:available,maintenance,inactive',
         ]);
 
         // Upload Gambar jika ada
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('fields', 'public');
         }
+
+        // Simpan array spesifikasi atau set array kosong jika tidak ada
+        $validated['specifications'] = $request->input('specifications', []);
 
         Field::create($validated);
 
@@ -63,22 +68,27 @@ class LapanganController extends Controller
     public function update(Request $request, Field $field)
     {
         $validated = $request->validate([
-            'branch_id'      => 'required|exists:branches,id',
-            'field_name'     => 'required|string|max:255',
-            'field_type'     => 'required|in:sintetis,vinyl,interlock,matras,semen',
-            'price_per_hour' => 'required|numeric|min:0',
-            'image'          => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'description'    => 'nullable|string',
-            'status'         => 'required|in:available,maintenance,inactive',
+            'branch_id'        => 'required|exists:branches,id',
+            'field_name'       => 'required|string|max:255',
+            'field_type'       => 'required|in:sintetis,vinyl,interlock,matras,semen',
+            'price_per_hour'   => 'required|numeric|min:0',
+            'image'            => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'description'      => 'nullable|string',
+            'specifications'   => 'nullable|array',
+            'specifications.*' => 'string|max:150',
+            'status'           => 'required|in:available,maintenance,inactive',
         ]);
 
-        // Upload Gambar baru dan hapus file lama
+        // Upload Gambar baru dan hapus file lama jika ada
         if ($request->hasFile('image')) {
             if ($field->image && Storage::disk('public')->exists($field->image)) {
                 Storage::disk('public')->delete($field->image);
             }
             $validated['image'] = $request->file('image')->store('fields', 'public');
         }
+
+        // Simpan array spesifikasi yang telah diperbarui
+        $validated['specifications'] = $request->input('specifications', []);
 
         $field->update($validated);
 
