@@ -18,11 +18,13 @@ class Field extends Model
         'price_per_hour',
         'image',
         'description',
+        'specifications',
         'status',
     ];
 
     protected $casts = [
         'price_per_hour' => 'decimal:2',
+        'specifications' => 'array',
     ];
 
     // Otomatis generate slug sebelum simpan data baru
