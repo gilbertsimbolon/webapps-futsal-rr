@@ -9,18 +9,30 @@ use Illuminate\Support\Facades\Auth;
 
 class CabangController extends Controller
 {
-    // fungsi index
+    // Daftar opsi fasilitas default
+    private $availableFacilities = [
+        'Parkir Luas',
+        'Toilet & Kamar Mandi',
+        'Musholla',
+        'Kantin / Warung',
+        'Free WiFi',
+        'Loker Penyimpanan',
+        'Tribun Penonton',
+        'Sewa Sepatu / Rompi',
+    ];
+
+    // Fungsi menampilkan daftar cabang
     public function index(Request $request)
     {
         $query = Branch::with('user');
 
-        // fitur pencarian
+        // Fitur pencarian
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('branch_name', 'like', "%{$search}%")
-                  ->orWhere('address', 'like', "%{$search}%")
-                  ->orWhere('phone', 'like', "%{$search}%");
+                    ->orWhere('address', 'like', "%{$search}%")
+                    ->orWhere('phone', 'like', "%{$search}%");
             });
         }
 
@@ -35,48 +47,60 @@ class CabangController extends Controller
             $owners = User::all();
         }
 
-        return view('cabang.index', compact('branches', 'owners'));
+        $availableFacilities = $this->availableFacilities;
+
+        return view('cabang.index', compact('branches', 'owners', 'availableFacilities'));
     }
 
-    // fungsi menambahkan data cabang
+    // Fungsi menambahkan data cabang
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'branch_name' => 'required|string|max:255',
-            'phone'       => 'required|string|max:20',
-            'address'     => 'required|string',
-            'description' => 'nullable|string',
-            'user_id'     => 'nullable|exists:users,id',
-            'status'      => 'required|in:active,inactive',
+            'branch_name'  => 'required|string|max:255',
+            'phone'        => 'required|string|max:20',
+            'address'      => 'required|string',
+            'description'  => 'nullable|string',
+            'facilities'   => 'nullable|array',
+            'facilities.*' => 'string|max:100',
+            'user_id'      => 'nullable|exists:users,id',
+            'status'       => 'required|in:active,inactive',
         ]);
 
         if (empty($validated['user_id'])) {
             $validated['user_id'] = Auth::id() ?? 1;
         }
 
+        // Ambil array fasilitas atau jadikan array kosong jika tidak dicentang
+        $validated['facilities'] = $request->input('facilities', []);
+
         Branch::create($validated);
 
         return redirect()->route('cabang.index')->with('success', 'Data cabang baru berhasil ditambahkan.');
     }
 
-    // fungsi memperbarui data cabang
+    // Fungsi memperbarui data cabang
     public function update(Request $request, Branch $branch)
     {
         $validated = $request->validate([
-            'branch_name' => 'required|string|max:255',
-            'phone'       => 'required|string|max:20',
-            'address'     => 'required|string',
-            'description' => 'nullable|string',
-            'user_id'     => 'nullable|exists:users,id',
-            'status'      => 'required|in:active,inactive',
+            'branch_name'  => 'required|string|max:255',
+            'phone'        => 'required|string|max:20',
+            'address'      => 'required|string',
+            'description'  => 'nullable|string',
+            'facilities'   => 'nullable|array',
+            'facilities.*' => 'string|max:100',
+            'user_id'      => 'nullable|exists:users,id',
+            'status'       => 'required|in:active,inactive',
         ]);
+
+        // Simpan array fasilitas terbaru
+        $validated['facilities'] = $request->input('facilities', []);
 
         $branch->update($validated);
 
         return redirect()->route('cabang.index')->with('success', 'Data cabang berhasil diperbarui.');
     }
 
-    // fungsi memperbarui status cabang
+    // Fungsi memperbarui status cabang
     public function toggleStatus(Branch $branch)
     {
         $newStatus = ($branch->status === 'active') ? 'inactive' : 'active';
@@ -86,7 +110,7 @@ class CabangController extends Controller
         return redirect()->route('cabang.index')->with('success', "Status cabang {$branch->branch_name} berhasil diubah menjadi {$statusIndo}.");
     }
 
-    // fungsi menghapus data cabang
+    // Fungsi menghapus data cabang
     public function destroy(Branch $branch)
     {
         $branch->delete();
