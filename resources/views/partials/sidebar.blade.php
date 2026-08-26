@@ -136,10 +136,10 @@
             </a>
         </li>
 
-        <li class="menu-item">
-            <a href="#" class="menu-link px-3">
+        <li class="menu-item {{ request()->routeIs('jadwal.*') ? 'active' : '' }}">
+            <a href="{{ route('jadwal.index') }}" class="menu-link px-3">
                 <i class="menu-icon tf-icons bx bx-time-five"></i>
-                <div data-i18n="Jam Operasional">Slot Jam Operasional</div>
+                <div data-i18n="Slot Jam Operasional">Slot Jam Operasional</div>
             </a>
         </li>
 

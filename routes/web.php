@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\LupaPasswordController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CabangController;
+use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\LapanganController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\ProfilController;
@@ -65,4 +66,11 @@ Route::middleware('auth')->group(function () {
     Route::put('/lapangan/{field}', [LapanganController::class, 'update'])->name('lapangan.update');
     Route::delete('/lapangan/{field}', [LapanganController::class, 'destroy'])->name('lapangan.destroy');
     Route::patch('/lapangan/{field}/toggle-status', [LapanganController::class, 'toggleStatus'])->name('lapangan.toggle-status');
+
+    Route::get('/jadwal', [JadwalController::class, 'index'])->name('jadwal.index');
+    Route::post('/jadwal', [JadwalController::class, 'store'])->name('jadwal.store');
+    Route::post('/jadwal/generate', [JadwalController::class, 'generate'])->name('jadwal.generate');
+    Route::put('/jadwal/{schedule}', [JadwalController::class, 'update'])->name('jadwal.update');
+    Route::delete('/jadwal/{schedule}', [JadwalController::class, 'destroy'])->name('jadwal.destroy');
+    Route::patch('/jadwal/{schedule}/toggle-status', [JadwalController::class, 'toggleStatus'])->name('jadwal.toggle-status');
 });
