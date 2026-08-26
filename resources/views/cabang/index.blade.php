@@ -36,7 +36,7 @@
                     <th>NAMA CABANG</th>
                     <th>PEMILIK / OWNER</th>
                     <th>KONTAK (WA)</th>
-                    <th>ALAMAT</th>
+                    <th>FASILITAS</th>
                     <th>STATUS</th>
                     <th class="text-center" style="width: 120px;">AKSI</th>
                 </tr>
@@ -62,7 +62,20 @@
                             </div>
                         </td>
                         <td>{{ $branch->phone }}</td>
-                        <td class="text-wrap" style="max-width: 280px;">{{ $branch->address }}</td>
+                        <td class="text-wrap" style="max-width: 260px;">
+                            @if (!empty($branch->facilities) && is_array($branch->facilities))
+                                <div class="d-flex flex-wrap gap-1">
+                                    @foreach (array_slice($branch->facilities, 0, 3) as $facility)
+                                        <span class="badge bg-label-primary" style="font-size: 11px;">{{ $facility }}</span>
+                                    @endforeach
+                                    @if (count($branch->facilities) > 3)
+                                        <span class="badge bg-label-secondary" style="font-size: 11px;">+{{ count($branch->facilities) - 3 }} lainnya</span>
+                                    @endif
+                                </div>
+                            @else
+                                <span class="text-muted small">-</span>
+                            @endif
+                        </td>
                         <td>
                             <!-- Form Toggle Switch Status -->
                             <form id="form-toggle-branch-{{ $branch->id }}" action="{{ route('cabang.toggle-status', $branch->id) }}" method="POST" class="m-0">
@@ -123,9 +136,9 @@
     @endif
 </div>
 
-<!-- ================= MODAL TAMBAH CABANG ================= -->
+<!-- Modal Tambah Cabang -->
 <div class="modal fade" id="modalCreateBranch" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <form class="modal-content" action="{{ route('cabang.store') }}" method="POST">
             @csrf
             <div class="modal-header">
@@ -133,39 +146,57 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="mb-3">
-                    <label class="form-label">Nama Cabang <span class="text-danger">*</span></label>
-                    <input type="text" name="branch_name" class="form-control" placeholder="Contoh: Arena Futsal Pusat" value="{{ old('branch_name') }}" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Pemilik / Penanggung Jawab</label>
-                    <select name="user_id" class="form-select">
-                        <option value="">-- Tetapkan Pemilik (Opsional) --</option>
-                        @foreach ($owners as $owner)
-                            <option value="{{ $owner->id }}" {{ old('user_id') == $owner->id ? 'selected' : '' }}>
-                                {{ $owner->name }} ({{ $owner->email }})
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Nomor WhatsApp / Telp <span class="text-danger">*</span></label>
-                    <input type="text" name="phone" class="form-control" placeholder="08xxxxxxxxxx" value="{{ old('phone') }}" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Alamat Lengkap <span class="text-danger">*</span></label>
-                    <textarea name="address" class="form-control" rows="3" placeholder="Masukkan alamat lengkap..." required>{{ old('address') }}</textarea>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Deskripsi / Fasilitas</label>
-                    <textarea name="description" class="form-control" rows="2" placeholder="Parkir luas, toilet, kantin, loker...">{{ old('description') }}</textarea>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Status Operasional <span class="text-danger">*</span></label>
-                    <select name="status" class="form-select" required>
-                        <option value="active" {{ old('status', 'active') == 'active' ? 'selected' : '' }}>Aktif</option>
-                        <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Nonaktif</option>
-                    </select>
+                <div class="row g-3">
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Nama Cabang <span class="text-danger">*</span></label>
+                        <input type="text" name="branch_name" class="form-control" placeholder="Contoh: Arena Futsal Pusat" value="{{ old('branch_name') }}" required>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Pemilik / Penanggung Jawab</label>
+                        <select name="user_id" class="form-select">
+                            <option value="">-- Tetapkan Pemilik (Opsional) --</option>
+                            @foreach ($owners as $owner)
+                                <option value="{{ $owner->id }}" {{ old('user_id') == $owner->id ? 'selected' : '' }}>
+                                    {{ $owner->name }} ({{ $owner->email }})
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Nomor WhatsApp / Telp <span class="text-danger">*</span></label>
+                        <input type="text" name="phone" class="form-control" placeholder="08xxxxxxxxxx" value="{{ old('phone') }}" required>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Status Operasional <span class="text-danger">*</span></label>
+                        <select name="status" class="form-select" required>
+                            <option value="active" {{ old('status', 'active') == 'active' ? 'selected' : '' }}>Aktif</option>
+                            <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Nonaktif</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Alamat Lengkap <span class="text-danger">*</span></label>
+                        <textarea name="address" class="form-control" rows="2" placeholder="Masukkan alamat lengkap..." required>{{ old('address') }}</textarea>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Deskripsi Cabang</label>
+                        <textarea name="description" class="form-control" rows="2" placeholder="Deskripsi singkat venue...">{{ old('description') }}</textarea>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label fw-bold">Fasilitas Cabang</label>
+                        <p class="text-muted small mb-2">Tambahkan fasilitas yang tersedia pada cabang ini agar mudah dilihat pengguna.</p>
+                        <div id="create-facility-container" class="d-flex flex-column gap-2 mb-2">
+                            <!-- Input dinamis pertama -->
+                            <div class="input-group">
+                                <input type="text" name="facilities[]" class="form-control" placeholder="Contoh: Parkir Luas">
+                                <button type="button" class="btn btn-outline-danger btn-remove-facility" disabled>
+                                    <i class="bx bx-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-primary" id="btn-add-create-facility">
+                            <i class="bx bx-plus me-1"></i> Tambah Baris Fasilitas
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -176,11 +207,11 @@
     </div>
 </div>
 
-<!-- ================= MODAL EDIT & DELETE (DI LUAR TABEL) ================= -->
+<!-- Modal Edit & Delete (Di Luar Tabel) -->
 @foreach ($branches as $branch)
     <!-- Modal Edit Cabang -->
     <div class="modal fade" id="modalEditBranch{{ $branch->id }}" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <form class="modal-content" action="{{ route('cabang.update', $branch->id) }}" method="POST">
                 @csrf
                 @method('PUT')
@@ -189,39 +220,68 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Nama Cabang <span class="text-danger">*</span></label>
-                        <input type="text" name="branch_name" class="form-control" value="{{ old('branch_name', $branch->branch_name) }}" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Pemilik / Penanggung Jawab</label>
-                        <select name="user_id" class="form-select">
-                            <option value="">-- Tetapkan Pemilik (Opsional) --</option>
-                            @foreach ($owners as $owner)
-                                <option value="{{ $owner->id }}" {{ old('user_id', $branch->user_id) == $owner->id ? 'selected' : '' }}>
-                                    {{ $owner->name }} ({{ $owner->email }})
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Nomor WhatsApp / Telp <span class="text-danger">*</span></label>
-                        <input type="text" name="phone" class="form-control" value="{{ old('phone', $branch->phone) }}" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Alamat Lengkap <span class="text-danger">*</span></label>
-                        <textarea name="address" class="form-control" rows="3" required>{{ old('address', $branch->address) }}</textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Deskripsi / Fasilitas</label>
-                        <textarea name="description" class="form-control" rows="2">{{ old('description', $branch->description) }}</textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Status Operasional <span class="text-danger">*</span></label>
-                        <select name="status" class="form-select" required>
-                            <option value="active" {{ old('status', $branch->status) == 'active' ? 'selected' : '' }}>Aktif</option>
-                            <option value="inactive" {{ old('status', $branch->status) == 'inactive' ? 'selected' : '' }}>Nonaktif</option>
-                        </select>
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <label class="form-label">Nama Cabang <span class="text-danger">*</span></label>
+                            <input type="text" name="branch_name" class="form-control" value="{{ old('branch_name', $branch->branch_name) }}" required>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label">Pemilik / Penanggung Jawab</label>
+                            <select name="user_id" class="form-select">
+                                <option value="">-- Tetapkan Pemilik (Opsional) --</option>
+                                @foreach ($owners as $owner)
+                                    <option value="{{ $owner->id }}" {{ old('user_id', $branch->user_id) == $owner->id ? 'selected' : '' }}>
+                                        {{ $owner->name }} ({{ $owner->email }})
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label">Nomor WhatsApp / Telp <span class="text-danger">*</span></label>
+                            <input type="text" name="phone" class="form-control" value="{{ old('phone', $branch->phone) }}" required>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label">Status Operasional <span class="text-danger">*</span></label>
+                            <select name="status" class="form-select" required>
+                                <option value="active" {{ old('status', $branch->status) == 'active' ? 'selected' : '' }}>Aktif</option>
+                                <option value="inactive" {{ old('status', $branch->status) == 'inactive' ? 'selected' : '' }}>Nonaktif</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Alamat Lengkap <span class="text-danger">*</span></label>
+                            <textarea name="address" class="form-control" rows="2" required>{{ old('address', $branch->address) }}</textarea>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Deskripsi Cabang</label>
+                            <textarea name="description" class="form-control" rows="2">{{ old('description', $branch->description) }}</textarea>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-bold">Fasilitas Cabang</label>
+                            <p class="text-muted small mb-2">Tambahkan fasilitas yang tersedia pada cabang ini.</p>
+                            <div id="edit-facility-container-{{ $branch->id }}" class="d-flex flex-column gap-2 mb-2">
+                                @php
+                                    $branchFacilities = is_array($branch->facilities) ? $branch->facilities : [];
+                                @endphp
+                                @forelse ($branchFacilities as $facility)
+                                    <div class="input-group">
+                                        <input type="text" name="facilities[]" class="form-control" value="{{ $facility }}" placeholder="Contoh: Parkir Luas">
+                                        <button type="button" class="btn btn-outline-danger btn-remove-facility">
+                                            <i class="bx bx-trash"></i>
+                                        </button>
+                                    </div>
+                                @empty
+                                    <div class="input-group">
+                                        <input type="text" name="facilities[]" class="form-control" placeholder="Contoh: Parkir Luas">
+                                        <button type="button" class="btn btn-outline-danger btn-remove-facility" disabled>
+                                            <i class="bx bx-trash"></i>
+                                        </button>
+                                    </div>
+                                @endforelse
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-primary btn-add-edit-facility" data-target="edit-facility-container-{{ $branch->id }}">
+                                <i class="bx bx-plus me-1"></i> Tambah Baris Fasilitas
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -271,7 +331,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const currentStatus = this.getAttribute('data-current-status');
             const newStatusIndo = (currentStatus === 'active') ? 'nonaktif' : 'aktif';
 
-            // Reset visual toggle sementara sebelum konfirmasi
             this.checked = (currentStatus === 'active');
 
             Swal.fire({
@@ -290,6 +349,67 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     });
+
+    // Tambah Baris Fasilitas (Modal Create)
+    const createContainer = document.getElementById('create-facility-container');
+    const btnAddCreate = document.getElementById('btn-add-create-facility');
+    
+    if (btnAddCreate) {
+        btnAddCreate.addEventListener('click', function () {
+            const row = document.createElement('div');
+            row.className = 'input-group';
+            row.innerHTML = `
+                <input type="text" name="facilities[]" class="form-control" placeholder="Contoh: Toilet & Kamar Mandi">
+                <button type="button" class="btn btn-outline-danger btn-remove-facility">
+                    <i class="bx bx-trash"></i>
+                </button>
+            `;
+            createContainer.appendChild(row);
+            updateRemoveButtons(createContainer);
+        });
+    }
+
+    // Tambah Baris Fasilitas (Modal Edit)
+    document.querySelectorAll('.btn-add-edit-facility').forEach(button => {
+        button.addEventListener('click', function () {
+            const targetId = this.getAttribute('data-target');
+            const container = document.getElementById(targetId);
+            if (container) {
+                const row = document.createElement('div');
+                row.className = 'input-group';
+                row.innerHTML = `
+                    <input type="text" name="facilities[]" class="form-control" placeholder="Contoh: Toilet & Kamar Mandi">
+                    <button type="button" class="btn btn-outline-danger btn-remove-facility">
+                        <i class="bx bx-trash"></i>
+                    </button>
+                `;
+                container.appendChild(row);
+                updateRemoveButtons(container);
+            }
+        });
+    });
+
+    // Event Delegation untuk Hapus Baris Fasilitas
+    document.addEventListener('click', function (e) {
+        if (e.target.closest('.btn-remove-facility')) {
+            const btn = e.target.closest('.btn-remove-facility');
+            const container = btn.closest('.d-flex');
+            if (container && container.querySelectorAll('.input-group').length > 1) {
+                btn.closest('.input-group').remove();
+                updateRemoveButtons(container);
+            }
+        }
+    });
+
+    function updateRemoveButtons(container) {
+        const inputGroups = container.querySelectorAll('.input-group');
+        inputGroups.forEach((group, index) => {
+            const removeBtn = group.querySelector('.btn-remove-facility');
+            if (removeBtn) {
+                removeBtn.disabled = (inputGroups.length === 1);
+            }
+        });
+    }
 });
 </script>
 @endpush
