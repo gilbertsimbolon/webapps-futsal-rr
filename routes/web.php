@@ -8,6 +8,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CabangController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\LapanganController;
+use App\Http\Controllers\MetodePembayaranController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\ProfilController;
 use Illuminate\Support\Facades\Route;
@@ -84,4 +85,11 @@ Route::middleware('auth')->group(function () {
 
     // API/Endpoint AJAX Cek Slot Ketersediaan
     Route::get('/api/available-slots', [BookingController::class, 'getAvailableSlots'])->name('bookings.available-slots');
+
+    // Route Metode Pembayaran
+    Route::get('/metode-pembayaran', [MetodePembayaranController::class, 'index'])->name('metode-pembayaran.index');
+    Route::post('/metode-pembayaran', [MetodePembayaranController::class, 'store'])->name('metode-pembayaran.store');
+    Route::put('/metode-pembayaran/{paymentMethod}', [MetodePembayaranController::class, 'update'])->name('metode-pembayaran.update');
+    Route::delete('/metode-pembayaran/{paymentMethod}', [MetodePembayaranController::class, 'destroy'])->name('metode-pembayaran.destroy');
+    Route::patch('/metode-pembayaran/{paymentMethod}/toggle-status', [MetodePembayaranController::class, 'toggleStatus'])->name('metode-pembayaran.toggle-status');
 });

@@ -53,7 +53,7 @@
 <aside id="layout-menu"
     class="layout-menu menu-vertical menu bg-menu-theme position-fixed d-flex flex-column vh-100 start-0 top-0 overflow-visible shadow-sm">
 
-    <!-- Tombol Toggle Buka/Tutup  -->
+    <!-- Tombol Toggle Buka/Tutup -->
     <a href="javascript:void(0);" id="btn-sneat-toggle"
         class="btn btn-sm btn-primary btn-icon rounded-circle shadow d-none d-xl-flex align-items-center justify-content-center border border-2 border-white p-0"
         title="Buka / Tutup Sidebar">
@@ -117,7 +117,7 @@
             </a>
         </li>
 
-        <!-- Kelola Venua (Menu Owner) -->
+        <!-- Kelola Venue (Menu Owner) -->
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Kelola Venue (Owner)</span>
         </li>
@@ -143,7 +143,23 @@
             </a>
         </li>
 
-        <li class="menu-item {{ request()->routeIs('bookings.*') ? 'active' : '' }}">
+        <li class="menu-item {{ request()->routeIs('metode-pembayaran.*') ? 'active' : '' }}">
+            <a href="{{ route('metode-pembayaran.index') }}" class="menu-link px-3">
+                <i class="menu-icon tf-icons bx bx-credit-card"></i>
+                <div data-i18n="Metode Pembayaran">Metode Pembayaran</div>
+            </a>
+        </li>
+
+        <li class="menu-item {{ request()->routeIs('bookings.verification') ? 'active' : '' }}">
+            {{-- <a href="{{ route('bookings.verification') }}" class="menu-link px-3"> --}}
+            <a href="#" class="menu-link px-3">
+                <i class="menu-icon tf-icons bx bx-check-shield"></i>
+                <div data-i18n="Verifikasi Booking">Verifikasi / ACC Booking</div>
+            </a>
+        </li>
+
+        <li
+            class="menu-item {{ request()->routeIs('bookings.*') && !request()->routeIs('bookings.verification') ? 'active' : '' }}">
             <a href="{{ route('bookings.index') }}" class="menu-link px-3">
                 <i class="menu-icon tf-icons bx bx-calendar-check"></i>
                 <div data-i18n="Booking Masuk">Booking Masuk Lapangan</div>
