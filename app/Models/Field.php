@@ -43,4 +43,10 @@ class Field extends Model
     {
         return $this->belongsTo(Branch::class);
     }
+
+    // Relasi ke Jadwal
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class);
+    }
 }
