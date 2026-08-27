@@ -11,6 +11,7 @@ use App\Http\Controllers\LapanganController;
 use App\Http\Controllers\MetodePembayaranController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\ProfilController;
+use App\Http\Controllers\RoundRobinController;
 use Illuminate\Support\Facades\Route;
 
 // Route Login
@@ -91,4 +92,11 @@ Route::middleware('auth')->group(function () {
     Route::put('/metode-pembayaran/{paymentMethod}', [MetodePembayaranController::class, 'update'])->name('metode-pembayaran.update');
     Route::delete('/metode-pembayaran/{paymentMethod}', [MetodePembayaranController::class, 'destroy'])->name('metode-pembayaran.destroy');
     Route::patch('/metode-pembayaran/{paymentMethod}/toggle-status', [MetodePembayaranController::class, 'toggleStatus'])->name('metode-pembayaran.toggle-status');
+
+
+    // Route Round Robin
+    Route::get('/round-robin/monitoring', [RoundRobinController::class, 'monitoring'])->name('round-robin.monitoring');
+    Route::get('/round-robin/simulasi', [RoundRobinController::class, 'simulation'])->name('round-robin.simulation');
+    Route::post('/round-robin/enqueue', [RoundRobinController::class, 'enqueueSimulation'])->name('round-robin.enqueue');
+    Route::patch('/round-robin/rotate/{queue}', [RoundRobinController::class, 'forceRotate'])->name('round-robin.rotate');
 });

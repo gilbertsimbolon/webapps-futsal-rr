@@ -165,15 +165,15 @@
             <span class="menu-header-text">Algoritma Round Robin</span>
         </li>
 
-        <li class="menu-item">
-            <a href="#" class="menu-link px-3">
+        <li class="menu-item {{ request()->routeIs('round-robin.monitoring') ? 'active' : '' }}">
+            <a href="{{ route('round-robin.monitoring') }}" class="menu-link px-3">
                 <i class="menu-icon tf-icons bx bx-sync"></i>
                 <div data-i18n="Monitoring Antrean">Monitoring Antrean RR</div>
             </a>
         </li>
 
-        <li class="menu-item">
-            <a href="#" class="menu-link px-3">
+        <li class="menu-item {{ request()->routeIs('round-robin.simulation') ? 'active' : '' }}">
+            <a href="{{ route('round-robin.simulation') }}" class="menu-link px-3">
                 <i class="menu-icon tf-icons bx bx-calculator"></i>
                 <div data-i18n="Simulasi Alur">Simulasi Alur RR</div>
             </a>
