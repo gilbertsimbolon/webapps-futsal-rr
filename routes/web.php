@@ -80,11 +80,10 @@ Route::middleware('auth')->group(function () {
     // Route Booking
     Route::get('/bookings', [BookingController::class, 'index'])->name('bookings.index');
     Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
+    Route::patch('/bookings/{booking}/approve', [BookingController::class, 'approve'])->name('bookings.approve');
     Route::patch('/bookings/{booking}/status', [BookingController::class, 'updateStatus'])->name('bookings.update-status');
     Route::delete('/bookings/{booking}', [BookingController::class, 'destroy'])->name('bookings.destroy');
-
-    // API/Endpoint AJAX Cek Slot Ketersediaan
-    Route::get('/api/available-slots', [BookingController::class, 'getAvailableSlots'])->name('bookings.available-slots');
+    Route::post('/api/bookings/available-slots', [BookingController::class, 'getAvailableSlots'])->name('bookings.available-slots');
 
     // Route Metode Pembayaran
     Route::get('/metode-pembayaran', [MetodePembayaranController::class, 'index'])->name('metode-pembayaran.index');

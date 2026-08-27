@@ -7,7 +7,7 @@
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
     <div>
         <h4 class="fw-bold mb-1">Data Booking Masuk</h4>
-        <p class="text-muted mb-0 small">Pantau seluruh riwayat transaksi sewa dan ketersediaan lapangan.</p>
+        <p class="text-muted mb-0 small">Pantau seluruh riwayat transaksi sewa, periksa bukti transfer, dan verifikasi ketersediaan lapangan.</p>
     </div>
 </div>
 
@@ -64,13 +64,13 @@
         <table class="table table-hover align-middle mb-0">
             <thead class="table-light">
                 <tr>
-                    <th style="width: 60px;">NO</th>
+                    <th style="width: 50px;">NO</th>
                     <th>KODE & PEMESAN</th>
                     <th>VENUE & LAPANGAN</th>
                     <th>JADWAL MAIN</th>
                     <th>TOTAL BAYAR</th>
                     <th>STATUS</th>
-                    <th class="text-center" style="width: 120px;">AKSI</th>
+                    <th class="text-center" style="width: 150px;">AKSI</th>
                 </tr>
             </thead>
             <tbody>
@@ -113,15 +113,33 @@
                         </td>
                         <td class="text-center">
                             <div class="d-inline-flex gap-1">
-                                <!-- Tombol Modal Ubah Status -->
-                                <button type="button" class="btn btn-icon btn-sm btn-outline-warning"
+                                <!-- 1. Tombol Detail & Bukti Pembayaran -->
+                                <button type="button" class="btn btn-icon btn-sm btn-outline-info"
                                     data-bs-toggle="modal"
-                                    data-bs-target="#modalStatusBooking{{ $booking->id }}"
-                                    title="Ubah Status">
-                                    <i class="bx bx-check-circle"></i>
+                                    data-bs-target="#modalDetailBooking{{ $booking->id }}"
+                                    title="Lihat Detail & Bukti Transfer">
+                                    <i class="bx bx-show"></i>
                                 </button>
 
-                                <!-- Tombol Modal Hapus -->
+                                <!-- 2. Tombol ACC Lunas Cepat / Ubah Status -->
+                                @if ($booking->status !== 'paid')
+                                    <form action="{{ route('bookings.approve', $booking->id) }}" method="POST" class="d-inline m-0">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit" class="btn btn-icon btn-sm btn-outline-success" title="ACC & Tandai Lunas">
+                                            <i class="bx bx-check"></i>
+                                        </button>
+                                    </form>
+                                @else
+                                    <button type="button" class="btn btn-icon btn-sm btn-outline-warning"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalStatusBooking{{ $booking->id }}"
+                                        title="Ubah Status">
+                                        <i class="bx bx-edit-alt"></i>
+                                    </button>
+                                @endif
+
+                                <!-- 3. Tombol Hapus Booking -->
                                 <button type="button" class="btn btn-icon btn-sm btn-outline-danger"
                                     data-bs-toggle="modal"
                                     data-bs-target="#modalDeleteBooking{{ $booking->id }}"
@@ -156,21 +174,74 @@
     @endif
 </div>
 
-<!-- Modal Update Status & Delete (Di Luar Tabel) -->
+<!-- Modal Modals (Detail, Ubah Status, Hapus) -->
 @foreach ($bookings as $booking)
-    <!-- Modal Ubah Status Booking -->
+    @php
+        $startTime = $booking->schedule ? \Carbon\Carbon::parse($booking->schedule->start_time)->format('H:i') : '-';
+        $endTime = $booking->schedule ? \Carbon\Carbon::parse($booking->schedule->end_time)->format('H:i') : '-';
+    @endphp
+
+    <!-- 1. Modal Detail & Bukti Pembayaran -->
+    <div class="modal fade" id="modalDetailBooking{{ $booking->id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detail Reservasi: {{ $booking->booking_code }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <div class="p-3 bg-light rounded h-100">
+                                <h6 class="fw-bold mb-2">Informasi Pemesanan</h6>
+                                <p class="mb-1 small"><strong>Nama Pemesan:</strong> {{ $booking->user?->name ?? 'Tamu' }}</p>
+                                <p class="mb-1 small"><strong>Email:</strong> {{ $booking->user?->email ?? '-' }}</p>
+                                <p class="mb-1 small"><strong>Venue:</strong> {{ $booking->branch?->branch_name ?? '-' }}</p>
+                                <p class="mb-1 small"><strong>Unit Lapangan:</strong> {{ $booking->field?->field_name ?? '-' }}</p>
+                                <p class="mb-1 small"><strong>Tanggal Main:</strong> {{ $booking->booking_date ? $booking->booking_date->format('d F Y') : '-' }}</p>
+                                <p class="mb-1 small"><strong>Jadwal Main:</strong> {{ $startTime }} - {{ $endTime }} WITA</p>
+                                <p class="mb-1 small"><strong>Metode Bayar:</strong> <span class="badge bg-label-secondary text-uppercase">{{ $booking->payment_method }}</span></p>
+                                <p class="mb-0 small"><strong>Total Bayar:</strong> <span class="text-success fw-bold">Rp {{ number_format($booking->total_amount, 0, ',', '.') }}</span></p>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="p-3 bg-light rounded text-center h-100 d-flex flex-column justify-content-center">
+                                <h6 class="fw-bold mb-2 text-start">Bukti Pembayaran</h6>
+                                @if ($booking->payment_proof)
+                                    <a href="{{ asset('storage/' . $booking->payment_proof) }}" target="_blank" class="d-block mb-2">
+                                        <img src="{{ asset('storage/' . $booking->payment_proof) }}" class="rounded border img-fluid" style="max-height: 180px; object-fit: contain;" alt="Bukti Transfer">
+                                    </a>
+                                    <small class="text-muted d-block">Klik gambar untuk melihat ukuran penuh</small>
+                                @else
+                                    <div class="py-4 text-muted">
+                                        <i class="bx bx-image-alt fs-1 d-block mb-1"></i>
+                                        <small>{{ $booking->payment_method === 'cash' ? 'Pembayaran Tunai di Lokasi (Cash)' : 'Pelanggan belum mengunggah bukti transfer.' }}</small>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Modal Ubah Status Booking -->
     <div class="modal fade" id="modalStatusBooking{{ $booking->id }}" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <form class="modal-content" action="{{ route('bookings.update-status', $booking->id) }}" method="POST">
                 @csrf
                 @method('PATCH')
                 <div class="modal-header">
-                    <h5 class="modal-title">Status Booking: {{ $booking->booking_code }}</h5>
+                    <h5 class="modal-title">Ubah Status: {{ $booking->booking_code }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label">Pilih Status Baru</label>
+                        <label class="form-label">Pilih Status Baru <span class="text-danger">*</span></label>
                         <select name="status" class="form-select" required>
                             <option value="pending" {{ $booking->status == 'pending' ? 'selected' : '' }}>Pending (Menunggu)</option>
                             <option value="confirmed" {{ $booking->status == 'confirmed' ? 'selected' : '' }}>Confirmed (Terkonfirmasi)</option>
@@ -188,7 +259,7 @@
         </div>
     </div>
 
-    <!-- Modal Konfirmasi Hapus Booking -->
+    <!-- 3. Modal Konfirmasi Hapus Booking -->
     <div class="modal fade" id="modalDeleteBooking{{ $booking->id }}" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <form class="modal-content" action="{{ route('bookings.destroy', $booking->id) }}" method="POST">
@@ -202,7 +273,7 @@
                     <i class="bx bx-error-circle text-danger display-3 mb-2"></i>
                     <h5 class="mb-1">Yakin ingin menghapus data booking ini?</h5>
                     <p class="text-muted mb-0">
-                        Kode Booking <strong>{{ $booking->booking_code }}</strong> pemesan <strong>{{ $booking->user?->name }}</strong> akan dihapus permanen.
+                        Kode Booking <strong>{{ $booking->booking_code }}</strong> pemesan <strong>{{ $booking->user?->name ?? 'Tamu' }}</strong> akan dihapus permanen.
                     </p>
                 </div>
                 <div class="modal-footer justify-content-center">
