@@ -178,7 +178,7 @@
 @include('jadwal.modals.tambah')
 
 <!-- Modal Generate Slot Otomatis -->
-
+@include('jadwal.modals.generate')
 
 <!-- Modal Edit & Delete (Di Luar Tabel) -->
 @foreach ($schedules as $schedule)
