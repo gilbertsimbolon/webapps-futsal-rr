@@ -84,7 +84,7 @@
     <!-- Menu -->
     <ul class="menu-inner py-2 flex-grow-1 overflow-y-auto overflow-x-hidden m-0">
 
-        <li class="menu-item active">
+        <li class="menu-item {{ request()->is('dashboard*') || request()->is('/') ? 'active' : '' }}">
             <a href="#" class="menu-link px-3">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Dashboard">Dashboard</div>
@@ -96,14 +96,16 @@
             <span class="menu-header-text">Menu Pelanggan</span>
         </li>
 
-        <li class="menu-item">
+        <li class="menu-item {{ request()->routeIs('sewa.*') ? 'active' : '' }}">
+            {{-- <a href="{{ route('sewa.index') }}" class="menu-link px-3"> --}}
             <a href="#" class="menu-link px-3">
                 <i class="menu-icon tf-icons bx bx-search-alt"></i>
                 <div data-i18n="Cari & Sewa">Cari & Sewa Lapangan</div>
             </a>
         </li>
 
-        <li class="menu-item">
+        <li class="menu-item {{ request()->routeIs('kalender.*') ? 'active' : '' }}">
+            {{-- <a href="{{ route('kalender.index') }}" class="menu-link px-3"> --}}
             <a href="#" class="menu-link px-3">
                 <i class="menu-icon tf-icons bx bx-calendar"></i>
                 <div data-i18n="Kalender Ketersediaan">Kalender Ketersediaan</div>
@@ -139,30 +141,22 @@
         <li class="menu-item {{ request()->routeIs('jadwal.*') ? 'active' : '' }}">
             <a href="{{ route('jadwal.index') }}" class="menu-link px-3">
                 <i class="menu-icon tf-icons bx bx-time-five"></i>
-                <div data-i18n="Slot Jam Operasional">Slot Jam Operasional</div>
+                <div data-i18n="Slot Jam Operasional">Jadwal</div>
             </a>
         </li>
 
-        <li class="menu-item {{ request()->routeIs('metode-pembayaran.*') ? 'active' : '' }}">
+        <li
+            class="menu-item {{ request()->routeIs('metode-pembayaran.*') ? 'active' : '' }}">
             <a href="{{ route('metode-pembayaran.index') }}" class="menu-link px-3">
                 <i class="menu-icon tf-icons bx bx-credit-card"></i>
                 <div data-i18n="Metode Pembayaran">Metode Pembayaran</div>
             </a>
         </li>
 
-        <li class="menu-item {{ request()->routeIs('bookings.verification') ? 'active' : '' }}">
-            {{-- <a href="{{ route('bookings.verification') }}" class="menu-link px-3"> --}}
-            <a href="#" class="menu-link px-3">
-                <i class="menu-icon tf-icons bx bx-check-shield"></i>
-                <div data-i18n="Verifikasi Booking">Verifikasi / ACC Booking</div>
-            </a>
-        </li>
-
-        <li
-            class="menu-item {{ request()->routeIs('bookings.*') && !request()->routeIs('bookings.verification') ? 'active' : '' }}">
+        <li class="menu-item {{ request()->routeIs('bookings.*') ? 'active' : '' }}">
             <a href="{{ route('bookings.index') }}" class="menu-link px-3">
                 <i class="menu-icon tf-icons bx bx-calendar-check"></i>
-                <div data-i18n="Booking Masuk">Booking Masuk Lapangan</div>
+                <div data-i18n="Booking Masuk">Booking</div>
             </a>
         </li>
 
