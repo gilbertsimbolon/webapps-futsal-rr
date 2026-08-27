@@ -51,7 +51,7 @@
         <table class="table table-hover align-middle mb-0">
             <thead class="table-light">
                 <tr>
-                    <th style="width: 50px;">URUTAN</th>
+                    <th style="width: 70px;" class="text-center">URUTAN</th>
                     <th>PEMESAN / PROSES</th>
                     <th>LAPANGAN & TANGGAL</th>
                     <th>SLOT WAKTU</th>
@@ -96,7 +96,9 @@
                         </td>
                         <td>
                             @if ($q->status === 'active_turn' && $q->quantum_end)
-                                <span class="fw-bold text-danger">{{ \Carbon\Carbon::now()->diffInMinutes($q->quantum_end, false) }} Menit Tersisa</span>
+                                <span class="fw-bold text-danger rr-countdown" data-deadline="{{ $q->quantum_end->toIso8601String() }}">
+                                    {{ ceil(\Carbon\Carbon::now()->floatDiffInMinutes($q->quantum_end, false)) }} Menit Tersisa
+                                </span>
                                 <br><small class="text-muted">Batas: {{ $q->quantum_end->format('H:i:s') }}</small>
                             @else
                                 <span class="text-muted">-</span>
@@ -104,7 +106,7 @@
                         </td>
                         <td class="text-center">
                             @if ($q->status === 'active_turn')
-                                <form action="{{ route('round-robin.rotate', $q->id) }}" method="POST" class="d-inline">
+                                <form action="{{ route('round-robin.rotate', $q->id) }}" method="POST" class="d-inline m-0">
                                     @csrf
                                     @method('PATCH')
                                     <button type="submit" class="btn btn-sm btn-outline-warning" title="Paksa Rotasi / Preemption">
@@ -138,3 +140,29 @@
     @endif
 </div>
 @endsection
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const timerElements = document.querySelectorAll('.rr-countdown');
+
+    timerElements.forEach(el => {
+        const deadline = new Date(el.getAttribute('data-deadline')).getTime();
+
+        const interval = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = deadline - now;
+
+            if (distance <= 0) {
+                clearInterval(interval);
+                el.innerHTML = "00:00 (Habis)";
+                window.location.reload();
+            } else {
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                el.innerHTML = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')} Menit Tersisa`;
+            }
+        }, 1000);
+    });
+});
+</script>
+@endpush
