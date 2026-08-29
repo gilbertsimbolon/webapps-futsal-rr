@@ -17,7 +17,15 @@ class Booking extends Model
         'field_id',
         'schedule_id',
         'booking_date',
+        'start_time',
+        'end_time',
+        'payment_deadline',
+        'paid_at',
+        'check_in_at',
         'total_amount',
+        'dp_amount',
+        'remaining_amount',
+        'payment_type',
         'payment_method',
         'payment_proof',
         'status',
@@ -25,11 +33,15 @@ class Booking extends Model
     ];
 
     protected $casts = [
-        'booking_date' => 'date',
-        'total_amount' => 'decimal:2',
+        'booking_date'     => 'date',
+        'total_amount'     => 'decimal:2',
+        'dp_amount'        => 'decimal:2',
+        'remaining_amount' => 'decimal:2',
+        'payment_deadline' => 'datetime',
+        'paid_at'          => 'datetime',
+        'check_in_at'      => 'datetime',
     ];
 
-    // Otomatis generate booking_code unik sebelum simpan
     protected static function boot()
     {
         parent::boot();
@@ -40,25 +52,21 @@ class Booking extends Model
         });
     }
 
-    // relasi ke user
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // relasi ke cabang
     public function branch()
     {
         return $this->belongsTo(Branch::class);
     }
 
-    // relasi ke lapangan
     public function field()
     {
         return $this->belongsTo(Field::class);
     }
 
-    // relasi ke jadwal
     public function schedule()
     {
         return $this->belongsTo(Schedule::class);

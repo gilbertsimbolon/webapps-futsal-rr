@@ -81,10 +81,17 @@ Route::middleware('auth')->group(function () {
     // Route Booking
     Route::get('/bookings', [BookingController::class, 'index'])->name('bookings.index');
     Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
-    Route::patch('/bookings/{booking}/approve', [BookingController::class, 'approve'])->name('bookings.approve');
+    Route::post('/bookings/walk-in', [BookingController::class, 'storeWalkIn'])->name('bookings.store-walkin');
+    Route::patch('/bookings/{booking}/pay', [BookingController::class, 'processPayment'])->name('bookings.pay');
+    Route::patch('/bookings/{booking}/check-in', [BookingController::class, 'checkIn'])->name('bookings.check-in');
+    Route::patch('/bookings/{booking}/reject', [BookingController::class, 'reject'])->name('bookings.reject');
     Route::patch('/bookings/{booking}/status', [BookingController::class, 'updateStatus'])->name('bookings.update-status');
     Route::delete('/bookings/{booking}', [BookingController::class, 'destroy'])->name('bookings.destroy');
     Route::post('/api/bookings/available-slots', [BookingController::class, 'getAvailableSlots'])->name('bookings.available-slots');
+
+    // Route Pembayaran Booking
+    Route::get('/booking/bayar/{booking_code}', [BookingController::class, 'showPayment'])->name('booking.payment');
+    Route::post('/booking/bayar/{booking}/upload', [BookingController::class, 'uploadPaymentProof'])->name('booking.upload-proof');
 
     // Route Metode Pembayaran
     Route::get('/metode-pembayaran', [MetodePembayaranController::class, 'index'])->name('metode-pembayaran.index');
@@ -92,7 +99,6 @@ Route::middleware('auth')->group(function () {
     Route::put('/metode-pembayaran/{paymentMethod}', [MetodePembayaranController::class, 'update'])->name('metode-pembayaran.update');
     Route::delete('/metode-pembayaran/{paymentMethod}', [MetodePembayaranController::class, 'destroy'])->name('metode-pembayaran.destroy');
     Route::patch('/metode-pembayaran/{paymentMethod}/toggle-status', [MetodePembayaranController::class, 'toggleStatus'])->name('metode-pembayaran.toggle-status');
-
 
     // Route Round Robin
     Route::get('/round-robin/monitoring', [RoundRobinController::class, 'monitoring'])->name('round-robin.monitoring');
