@@ -37,4 +37,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Branch::class);
     }
+
+    // relasi ke metode pembayaran
+    public function paymentMethod()
+    {
+        return $this->hasMany(PaymentMethod::class);
+    }
 }

@@ -10,6 +10,7 @@ class PaymentMethod extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'name',
         'type',
         'account_number',
@@ -18,4 +19,10 @@ class PaymentMethod extends Model
         'instructions',
         'status',
     ];
+
+    // relasi ke user
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
