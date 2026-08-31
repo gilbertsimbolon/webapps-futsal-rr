@@ -1,6 +1,6 @@
 <div class="modal fade" id="modalGenerateSlot" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <form class="modal-content" action="{{ route('jadwal.generate') }}" method="POST">
+        <form class="modal-content" action="{{ route('pemilik.jadwal.generate') }}" method="POST">
             @csrf
             <div class="modal-header">
                 <h5 class="modal-title">Generate Slot Jam Otomatis</h5>

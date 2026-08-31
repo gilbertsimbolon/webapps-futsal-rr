@@ -1,6 +1,6 @@
 <div class="modal fade" id="modalEditSlot{{ $schedule->id }}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <form class="modal-content" action="{{ route('jadwal.update', $schedule->id) }}" method="POST">
+        <form class="modal-content" action="{{ route('pemilik.jadwal.update', $schedule->id) }}" method="POST">
             @csrf
             @method('PUT')
             <div class="modal-header">

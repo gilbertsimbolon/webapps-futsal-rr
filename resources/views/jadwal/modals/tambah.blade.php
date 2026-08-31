@@ -1,6 +1,6 @@
 <div class="modal fade" id="modalCreateSlot" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <form class="modal-content" action="{{ route('jadwal.store') }}" method="POST">
+        <form class="modal-content" action="{{ route('pemilik.jadwal.store') }}" method="POST">
             @csrf
             <div class="modal-header">
                 <h5 class="modal-title">Tambah Slot Jam Operasional</h5>

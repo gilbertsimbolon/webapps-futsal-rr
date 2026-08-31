@@ -1,6 +1,6 @@
 <div class="modal fade" id="modalDeleteSlot{{ $schedule->id }}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <form class="modal-content" action="{{ route('jadwal.destroy', $schedule->id) }}" method="POST">
+        <form class="modal-content" action="{{ route('pemilik.jadwal.destroy', $schedule->id) }}" method="POST">
             @csrf
             @method('DELETE')
             <div class="modal-header">
