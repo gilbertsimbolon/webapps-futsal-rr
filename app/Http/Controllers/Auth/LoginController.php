@@ -8,41 +8,66 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    // fungsi index
+    // Halaman login
     public function index()
     {
         return view('auth.login');
     }
 
-    // fungsi login, (store)
+    // Proses login
     public function store(Request $request)
     {
-        // validasi data
+        // Validasi
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required|string',
         ]);
 
-        // proses autentikasi jika berhasil
-        if (Auth::attempt($credentials, $request->remember)) {
-            $request->session()->regenerate();
-
-            $user = Auth::user();
-
-            if (isset($user->status) && $user->status !== 'aktif') {
-                Auth::logout();
-                $request->session()->invalidate();
-                $request->session()->regenerateToken();
-
-                return back()->withErrors(['email' => 'Akun Anda sedang dinonaktifkan. Silakan hubungi admin.']);
-            }
-
-            return redirect()->route('dashboard.admin');
+        // Proses autentikasi
+        if (!Auth::attempt($credentials, $request->boolean('remember'))) {
+            return back()
+                ->withErrors([
+                    'email' => 'Email atau password yang Anda masukkan salah.',
+                ])
+                ->onlyInput('email');
         }
 
-        // jika gagal
+        // Regenerasi session
+        $request->session()->regenerate();
+
+        $user = Auth::user();
+
+        // Cek status akun
+        if (isset($user->status) && $user->status !== 'aktif') {
+            Auth::logout();
+
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return back()
+                ->withErrors([
+                    'email' => 'Akun Anda sedang dinonaktifkan. Silakan hubungi admin.',
+                ])
+                ->onlyInput('email');
+        }
+
+        // Redirect berdasarkan role
+        if ($user->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+
+        if ($user->role === 'owner') {
+            return redirect()->route('owner.dashboard');
+        }
+
+        // Jika role tidak dikenali
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return back()->withErrors([
-            'email' => 'Email atau password yang Anda masukkan salah.',
-        ])->onlyInput('email');
+            'email' => 'Role akun tidak dikenali. Silakan hubungi admin.',
+        ]);
     }
 }
