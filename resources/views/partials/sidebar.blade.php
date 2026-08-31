@@ -54,7 +54,6 @@
     class="layout-menu menu-vertical menu bg-menu-theme position-fixed d-flex flex-column vh-100 start-0 top-0 overflow-visible shadow-sm">
 
     <!-- Tombol Toggle -->
-
     <a href="javascript:void(0);"
         id="btn-sneat-toggle"
         class="btn btn-sm btn-primary btn-icon rounded-circle shadow d-none d-xl-flex align-items-center justify-content-center border border-2 border-white p-0"
@@ -63,9 +62,7 @@
         <i id="btn-sneat-icon" class="bx bx-chevron-left fs-5"></i>
     </a>
 
-
     <!-- Header -->
-
     <div class="app-brand demo d-flex flex-column align-items-center justify-content-center text-center p-3 flex-shrink-0 border-bottom bg-menu-theme position-sticky top-0"
         style="z-index: 10; height: auto !important;">
 
@@ -73,7 +70,6 @@
             class="app-brand-link d-flex flex-column align-items-center text-decoration-none w-100 p-0 m-0">
 
             <span class="app-brand-logo demo mb-2">
-
                 <img src="{{ asset('img/logo.png') }}"
                     alt="Logo"
                     class="rounded"
@@ -82,39 +78,32 @@
 
                 <i id="alt-logo-icon"
                     class="bx bx-football fs-2 text-primary"
-                    style="display: none;"></i>
-
+                    style="display: none;">
+                </i>
             </span>
 
             <span class="app-brand-text demo text-heading fw-bold fs-5 text-truncate px-1">
                 bkngftsl.
             </span>
-
         </a>
 
         <a href="javascript:void(0);"
             class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
 
             <i class="bx bx-chevron-left bx-sm align-middle"></i>
-
         </a>
-
     </div>
 
-
     <!-- Menu -->
-
     <ul class="menu-inner py-2 flex-grow-1 overflow-y-auto overflow-x-hidden m-0">
 
+        <!-- ========================================================= -->
+        <!-- ADMIN -->
+        <!-- ========================================================= -->
 
-        {{-- ========================================================= --}}
-        {{-- MENU ADMIN --}}
-        {{-- ========================================================= --}}
-
-        @if (auth()->user()?->role === 'admin')
+        @if (auth()->user()?->hasRole('admin'))
 
             <!-- Dashboard -->
-
             <li class="menu-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
 
                 <a href="{{ route('admin.dashboard') }}"
@@ -127,18 +116,15 @@
                     </div>
 
                 </a>
-
             </li>
 
 
             <!-- Data Master -->
 
             <li class="menu-header small text-uppercase">
-
                 <span class="menu-header-text">
                     Data Master
                 </span>
-
             </li>
 
 
@@ -156,7 +142,6 @@
                     </div>
 
                 </a>
-
             </li>
 
 
@@ -174,18 +159,15 @@
                     </div>
 
                 </a>
-
             </li>
 
 
             <!-- Round Robin -->
 
             <li class="menu-header small text-uppercase">
-
                 <span class="menu-header-text">
                     Round Robin
                 </span>
-
             </li>
 
 
@@ -203,7 +185,6 @@
                     </div>
 
                 </a>
-
             </li>
 
 
@@ -221,20 +202,19 @@
                     </div>
 
                 </a>
+            </li>
 
+
+            <!-- Administrasi -->
+
+            <li class="menu-header small text-uppercase">
+                <span class="menu-header-text">
+                    Administrasi
+                </span>
             </li>
 
 
             <!-- Manajemen Pengguna -->
-
-            <li class="menu-header small text-uppercase">
-
-                <span class="menu-header-text">
-                    Administrasi
-                </span>
-
-            </li>
-
 
             <li class="menu-item {{ request()->routeIs('admin.pengguna.*') ? 'active' : '' }}">
 
@@ -248,53 +228,48 @@
                     </div>
 
                 </a>
-
             </li>
 
         @endif
 
 
+        <!-- ========================================================= -->
+        <!-- PEMILIK -->
+        <!-- ========================================================= -->
 
-        {{-- ========================================================= --}}
-        {{-- MENU OWNER --}}
-        {{-- ========================================================= --}}
+        @if (auth()->user()?->hasRole('pemilik'))
 
-        @if (auth()->user()?->role === 'owner')
+            <!-- Dashboard -->
 
-            <!-- Dashboard Owner -->
+            <li class="menu-item {{ request()->routeIs('pemilik.dashboard') ? 'active' : '' }}">
 
-            <li class="menu-item {{ request()->routeIs('owner.dashboard') ? 'active' : '' }}">
-
-                <a href="{{ route('owner.dashboard') }}"
+                <a href="{{ route('pemilik.dashboard') }}"
                     class="menu-link px-3">
 
                     <i class="menu-icon tf-icons bx bx-home-circle"></i>
 
-                    <div data-i18n="Dashboard Owner">
+                    <div data-i18n="Dashboard">
                         Dashboard
                     </div>
 
                 </a>
-
             </li>
 
 
             <!-- Kelola Venue -->
 
             <li class="menu-header small text-uppercase">
-
                 <span class="menu-header-text">
                     Kelola Venue
                 </span>
-
             </li>
 
 
             <!-- Data Cabang -->
 
-            <li class="menu-item {{ request()->routeIs('owner.cabang.*') ? 'active' : '' }}">
+            <li class="menu-item {{ request()->routeIs('pemilik.cabang.*') ? 'active' : '' }}">
 
-                <a href="{{ route('owner.cabang.index') }}"
+                <a href="{{ route('pemilik.cabang.index') }}"
                     class="menu-link px-3">
 
                     <i class="menu-icon tf-icons bx bx-building-house"></i>
@@ -304,15 +279,14 @@
                     </div>
 
                 </a>
-
             </li>
 
 
             <!-- Data Lapangan -->
 
-            <li class="menu-item {{ request()->routeIs('owner.lapangan.*') ? 'active' : '' }}">
+            <li class="menu-item {{ request()->routeIs('pemilik.lapangan.*') ? 'active' : '' }}">
 
-                <a href="{{ route('owner.lapangan.index') }}"
+                <a href="{{ route('pemilik.lapangan.index') }}"
                     class="menu-link px-3">
 
                     <i class="menu-icon tf-icons bx bx-layer"></i>
@@ -322,15 +296,14 @@
                     </div>
 
                 </a>
-
             </li>
 
 
             <!-- Jadwal -->
 
-            <li class="menu-item {{ request()->routeIs('owner.jadwal.*') ? 'active' : '' }}">
+            <li class="menu-item {{ request()->routeIs('pemilik.jadwal.*') ? 'active' : '' }}">
 
-                <a href="{{ route('owner.jadwal.index') }}"
+                <a href="{{ route('pemilik.jadwal.index') }}"
                     class="menu-link px-3">
 
                     <i class="menu-icon tf-icons bx bx-time-five"></i>
@@ -340,15 +313,14 @@
                     </div>
 
                 </a>
-
             </li>
 
 
             <!-- Metode Pembayaran -->
 
-            <li class="menu-item {{ request()->routeIs('owner.metode-pembayaran.*') ? 'active' : '' }}">
+            <li class="menu-item {{ request()->routeIs('pemilik.metode-pembayaran.*') ? 'active' : '' }}">
 
-                <a href="{{ route('owner.metode-pembayaran.index') }}"
+                <a href="{{ route('pemilik.metode-pembayaran.index') }}"
                     class="menu-link px-3">
 
                     <i class="menu-icon tf-icons bx bx-credit-card"></i>
@@ -358,24 +330,21 @@
                     </div>
 
                 </a>
-
             </li>
 
 
             <!-- Booking -->
 
             <li class="menu-header small text-uppercase">
-
                 <span class="menu-header-text">
                     Booking
                 </span>
-
             </li>
 
 
-            <li class="menu-item {{ request()->routeIs('owner.bookings.*') ? 'active' : '' }}">
+            <li class="menu-item {{ request()->routeIs('pemilik.bookings.*') ? 'active' : '' }}">
 
-                <a href="{{ route('owner.bookings.index') }}"
+                <a href="{{ route('pemilik.bookings.index') }}"
                     class="menu-link px-3">
 
                     <i class="menu-icon tf-icons bx bx-calendar-check"></i>
@@ -385,24 +354,21 @@
                     </div>
 
                 </a>
-
             </li>
 
 
             <!-- Laporan -->
 
             <li class="menu-header small text-uppercase">
-
                 <span class="menu-header-text">
                     Laporan
                 </span>
-
             </li>
 
 
-            <li class="menu-item {{ request()->routeIs('owner.laporan.*') ? 'active' : '' }}">
+            <li class="menu-item {{ request()->routeIs('pemilik.laporan.*') ? 'active' : '' }}">
 
-                <a href="{{ route('owner.laporan.booking') }}"
+                <a href="{{ route('pemilik.laporan.booking') }}"
                     class="menu-link px-3">
 
                     <i class="menu-icon tf-icons bx bx-file"></i>
@@ -412,18 +378,16 @@
                     </div>
 
                 </a>
-
             </li>
 
         @endif
 
 
+        <!-- ========================================================= -->
+        <!-- PELANGGAN -->
+        <!-- ========================================================= -->
 
-        {{-- ========================================================= --}}
-        {{-- MENU CUSTOMER --}}
-        {{-- ========================================================= --}}
-
-        @if (auth()->user()?->role === 'customer')
+        @if (auth()->user()?->hasRole('pelanggan'))
 
             <!-- Cari Lapangan -->
 
@@ -439,7 +403,6 @@
                     </div>
 
                 </a>
-
             </li>
 
 
@@ -457,7 +420,6 @@
                     </div>
 
                 </a>
-
             </li>
 
 
@@ -475,7 +437,6 @@
                     </div>
 
                 </a>
-
             </li>
 
         @endif
@@ -505,9 +466,7 @@
             <div class="menu-text overflow-hidden">
 
                 <h6 class="mb-0 text-truncate fs-7 fw-bold">
-
                     {{ auth()->user()?->name ?? 'Pengguna' }}
-
                 </h6>
 
                 <small class="text-muted text-truncate d-block"
@@ -521,6 +480,8 @@
 
         </a>
 
+
+        <!-- Logout -->
 
         <form action="{{ route('logout') }}"
             method="POST"
@@ -583,6 +544,7 @@
 
                 const hidden =
                     htmlTag.classList.contains('sidebar-fully-hidden');
+
 
                 localStorage.setItem(
                     'sidebar-fully-hidden',

@@ -164,21 +164,21 @@ Route::middleware('auth')->group(function () {
 
 
     // ==========================================
-    // OWNER
+    // PEMILIK
     // ==========================================
 
-    Route::prefix('owner')
-        ->middleware('role:owner')
-        ->name('owner.')
+    Route::prefix('pemilik')
+        ->middleware('role:pemilik')
+        ->name('pemilik.')
         ->group(function () {
 
-            // Dashboard Owner
+            // Dashboard Pemilik
 
             Route::get('/dashboard', [AdminDashboardController::class, 'index'])
                 ->name('dashboard');
 
 
-            // Data Cabang Owner
+            // Data Cabang Pemilik
 
             Route::get('/cabang', [CabangController::class, 'index'])
                 ->name('cabang.index');
@@ -196,7 +196,7 @@ Route::middleware('auth')->group(function () {
                 ->name('cabang.toggle-status');
 
 
-            // Data Lapangan Owner
+            // Data Lapangan Pemilik
 
             Route::get('/lapangan', [LapanganController::class, 'index'])
                 ->name('lapangan.index');
@@ -211,10 +211,10 @@ Route::middleware('auth')->group(function () {
                 ->name('lapangan.destroy');
 
             Route::patch('/lapangan/{field}/toggle-status', [LapanganController::class, 'toggleStatus'])
-                ->name('owner.lapangan.toggle-status');
+                ->name('lapangan.toggle-status');
 
 
-            // Jadwal Lapangan Owner
+            // Jadwal Lapangan Pemilik
 
             Route::get('/jadwal', [JadwalController::class, 'index'])
                 ->name('jadwal.index');
@@ -235,7 +235,7 @@ Route::middleware('auth')->group(function () {
                 ->name('jadwal.toggle-status');
 
 
-            // Metode Pembayaran Owner
+            // Metode Pembayaran Pemilik
 
             Route::get('/metode-pembayaran', [MetodePembayaranController::class, 'index'])
                 ->name('metode-pembayaran.index');
@@ -253,7 +253,7 @@ Route::middleware('auth')->group(function () {
                 ->name('metode-pembayaran.toggle-status');
 
 
-            // Booking Owner
+            // Booking Pemilik
 
             Route::get('/bookings', [BookingController::class, 'index'])
                 ->name('bookings.index');
@@ -292,7 +292,7 @@ Route::middleware('auth')->group(function () {
                 ->name('booking.upload-proof');
 
 
-            // Laporan Booking Owner
+            // Laporan Booking Pemilik
 
             Route::get('/laporan/booking', [LaporanBookingController::class, 'index'])
                 ->name('laporan.booking');
@@ -300,30 +300,35 @@ Route::middleware('auth')->group(function () {
 
 
     // ==========================================
-    // CUSTOMER
+    // PELANGGAN
     // ==========================================
 
-    // Cari dan Sewa Lapangan
+    Route::prefix('pelanggan')
+        ->middleware('role:pelanggan')
+        ->name('pelanggan.')
+        ->group(function () {
 
-    Route::get('/cari-lapangan', [SewaLapanganController::class, 'index'])
-        ->name('sewa.index');
+            // Cari Lapangan
 
-    Route::get('/sewa/{field}', [SewaLapanganController::class, 'create'])
-        ->name('sewa.create');
+            Route::get('/cari-lapangan', [SewaLapanganController::class, 'index'])
+                ->name('sewa.index');
 
-
-    // Kalender Ketersediaan
-
-    Route::get('/kalender-ketersediaan', [KalenderKetersediaanController::class, 'index'])
-        ->name('kalender.index');
+            Route::get('/sewa/{field}', [SewaLapanganController::class, 'create'])
+                ->name('sewa.create');
 
 
-    // Riwayat Booking
+            // Kalender Ketersediaan
 
-    Route::get('/riwayat-booking', [RiwayatBookingController::class, 'index'])
-        ->name('riwayat.index');
+            Route::get('/kalender-ketersediaan', [KalenderKetersediaanController::class, 'index'])
+                ->name('kalender.index');
 
-    Route::patch('/riwayat-booking/{booking}/cancel', [RiwayatBookingController::class, 'cancel'])
-        ->name('riwayat.cancel');
 
+            // Riwayat Booking
+
+            Route::get('/riwayat-booking', [RiwayatBookingController::class, 'index'])
+                ->name('riwayat.index');
+
+            Route::patch('/riwayat-booking/{booking}/cancel', [RiwayatBookingController::class, 'cancel'])
+                ->name('riwayat.cancel');
+        });
 });

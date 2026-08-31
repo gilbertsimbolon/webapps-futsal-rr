@@ -7,9 +7,7 @@ use Spatie\Permission\Models\Permission;
 
 class PermissionSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+    // Membuat permission
     public function run(): void
     {
         $permissions = [
@@ -61,7 +59,6 @@ class PermissionSeeder extends Seeder
             'metode-pembayaran.tambah',
             'metode-pembayaran.ubah',
             'metode-pembayaran.hapus',
-
         ];
 
         foreach ($permissions as $permission) {

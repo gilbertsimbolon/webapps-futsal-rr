@@ -51,13 +51,17 @@ class LoginController extends Controller
                 ->onlyInput('email');
         }
 
-        // Redirect berdasarkan role
-        if ($user->role === 'admin') {
+        // Redirect berdasarkan role Spatie
+        if ($user->hasRole('admin')) {
             return redirect()->route('admin.dashboard');
         }
 
-        if ($user->role === 'owner') {
+        if ($user->hasRole('pemilik')) {
             return redirect()->route('owner.dashboard');
+        }
+
+        if ($user->hasRole('pelanggan')) {
+            return redirect()->route('sewa.index');
         }
 
         // Jika role tidak dikenali
@@ -66,8 +70,10 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return back()->withErrors([
-            'email' => 'Role akun tidak dikenali. Silakan hubungi admin.',
-        ]);
+        return back()
+            ->withErrors([
+                'email' => 'Role akun tidak dikenali. Silakan hubungi admin.',
+            ])
+            ->onlyInput('email');
     }
 }

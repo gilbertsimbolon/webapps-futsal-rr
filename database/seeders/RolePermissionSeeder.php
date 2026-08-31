@@ -9,16 +9,18 @@ use Spatie\Permission\PermissionRegistrar;
 
 class RolePermissionSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+    // Mengatur permission setiap role
     public function run(): void
     {
+        // Bersihkan cache permission
         app(PermissionRegistrar::class)->forgetCachedPermissions();
 
-        // Admin
+        // Ambil semua permission
+        $permissions = Permission::all();
+
+        // Admin mendapatkan semua permission
         $admin = Role::findByName('admin');
-        $admin->syncPermissions(Permission::all());
+        $admin->syncPermissions($permissions);
 
         // Pemilik
         $pemilik = Role::findByName('pemilik');
@@ -46,9 +48,14 @@ class RolePermissionSeeder extends Seeder
             'jadwal.hapus',
 
             'metode-pembayaran.lihat',
+            'metode-pembayaran.tambah',
+            'metode-pembayaran.ubah',
+            'metode-pembayaran.hapus',
+
+            'pelanggan.lihat',
         ]);
 
-        // Pengguna
+        // Pelanggan
         $pelanggan = Role::findByName('pelanggan');
 
         $pelanggan->syncPermissions([
@@ -58,5 +65,8 @@ class RolePermissionSeeder extends Seeder
             'profil.ubah',
             'profil.ganti-password',
         ]);
+
+        // Bersihkan cache permission setelah selesai
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
     }
 }
