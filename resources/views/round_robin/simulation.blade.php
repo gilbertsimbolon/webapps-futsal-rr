@@ -9,7 +9,7 @@
         <h4 class="fw-bold mb-1">Simulasi Algoritma Round Robin (RR)</h4>
         <p class="text-muted mb-0 small">Uji coba interaktif pengalokasian slot dan rotasi Time Quantum saat terjadi bentrok waktu.</p>
     </div>
-    <a href="{{ route('round-robin.monitoring') }}" class="btn btn-secondary">
+    <a href="{{ route('admin.round-robin.monitoring') }}" class="btn btn-secondary">
         <i class="bx bx-arrow-back me-1"></i> Kembali ke Monitoring
     </a>
 </div>
@@ -22,7 +22,7 @@
                 <h5 class="mb-0 fw-bold"><i class="bx bx-plus-circle me-2 text-primary"></i>Tambah Proses Antrean Baru</h5>
             </div>
             <div class="card-body p-4">
-                <form action="{{ route('round-robin.enqueue') }}" method="POST">
+                <form action="{{ route('admin.round-robin.enqueue') }}" method="POST">
                     @csrf
                     <div class="mb-3">
                         <label class="form-label">Pilih Unit Lapangan <span class="text-danger">*</span></label>

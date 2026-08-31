@@ -9,7 +9,7 @@
         <h4 class="fw-bold mb-1">Monitoring Antrean Round Robin</h4>
         <p class="text-muted mb-0 small">Pantau distribusi Time Quantum (q = 15 Menit) dan status pergiliran antrean pemesanan lapangan.</p>
     </div>
-    <a href="{{ route('round-robin.simulation') }}" class="btn btn-outline-primary">
+    <a href="{{ route('admin.round-robin.simulation') }}" class="btn btn-outline-primary">
         <i class="bx bx-calculator me-1"></i> Buka Simulasi Alur RR
     </a>
 </div>
@@ -17,7 +17,7 @@
 <!-- Filter -->
 <div class="card border-0 shadow-sm mb-4">
     <div class="card-body p-3">
-        <form action="{{ route('round-robin.monitoring') }}" method="GET" class="row g-2 align-items-center">
+        <form action="{{ route('admin.round-robin.monitoring') }}" method="GET" class="row g-2 align-items-center">
             <div class="col-12 col-md-5">
                 <select name="field_id" class="form-select">
                     <option value="">-- Semua Unit Lapangan --</option>
@@ -36,7 +36,7 @@
                     <i class="bx bx-filter-alt me-1"></i> Filter
                 </button>
                 @if(request()->hasAny(['field_id', 'date']))
-                    <a href="{{ route('round-robin.monitoring') }}" class="btn btn-outline-secondary" title="Reset">
+                    <a href="{{ route('admin.round-robin.monitoring') }}" class="btn btn-outline-secondary" title="Reset">
                         <i class="bx bx-reset"></i>
                     </a>
                 @endif
@@ -106,7 +106,7 @@
                         </td>
                         <td class="text-center">
                             @if ($q->status === 'active_turn')
-                                <form action="{{ route('round-robin.rotate', $q->id) }}" method="POST" class="d-inline m-0">
+                                <form action="{{ route('admin.round-robin.rotate', $q->id) }}" method="POST" class="d-inline m-0">
                                     @csrf
                                     @method('PATCH')
                                     <button type="submit" class="btn btn-sm btn-outline-warning" title="Paksa Rotasi / Preemption">
