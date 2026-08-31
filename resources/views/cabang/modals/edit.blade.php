@@ -32,7 +32,7 @@
 
                 <div class="row g-3">
 
-                    // Nama Cabang
+                    <!-- Nama Cabang -->
                     <div class="col-12 col-md-6">
 
                         <label class="form-label">
@@ -55,7 +55,7 @@
                     </div>
 
 
-                    // Pemilik Cabang
+                    <!-- Pemilik Cabang -->
                     <div class="col-12 col-md-6">
 
                         <label class="form-label">
@@ -102,8 +102,6 @@
                                 value="{{ $branch->user?->name ?? auth()->user()->name }}"
                                 readonly>
 
-                            // Jangan kirim user_id dari pemilik.
-                            // Controller akan mempertahankan pemilik asli.
                             <small class="text-muted">
                                 Pemilik cabang tidak dapat mengubah kepemilikan cabang.
                             </small>
@@ -113,7 +111,7 @@
                     </div>
 
 
-                    // Nomor WhatsApp
+                    <!-- Nomor Whatsapp -->
                     <div class="col-12 col-md-6">
 
                         <label class="form-label">
@@ -137,7 +135,7 @@
                     </div>
 
 
-                    // Status Operasional
+                    <!-- Status Operasional -->
                     <div class="col-12 col-md-6">
 
                         <label class="form-label">
@@ -170,7 +168,7 @@
                     </div>
 
 
-                    // Alamat
+                    <!-- Alamat -->
                     <div class="col-12">
 
                         <label class="form-label">
@@ -193,7 +191,7 @@
                     </div>
 
 
-                    // Deskripsi
+                    <!-- Deskripsi -->
                     <div class="col-12">
 
                         <label class="form-label">
@@ -214,7 +212,7 @@
                     </div>
 
 
-                    // Fasilitas
+                    <!-- Fasilitas -->
                     <div class="col-12">
 
                         <label class="form-label fw-bold">

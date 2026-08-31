@@ -1,6 +1,6 @@
 <div class="modal fade" id="modalEditUser{{ $user->id }}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <form class="modal-content" action="{{ route('pengguna.update', $user->id) }}" method="POST">
+        <form class="modal-content" action="{{ route('admin.pengguna.update', $user->id) }}" method="POST">
             @csrf
             @method('PUT')
             <div class="modal-header">

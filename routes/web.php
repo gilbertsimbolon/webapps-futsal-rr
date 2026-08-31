@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CabangController;
 use App\Http\Controllers\Dashboard\AdminDashboardController;
+use App\Http\Controllers\Dashboard\PemilikDashboardController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\KalenderKetersediaanController;
 use App\Http\Controllers\LapanganController;
@@ -174,7 +175,7 @@ Route::middleware('auth')->group(function () {
 
             // Dashboard Pemilik
 
-            Route::get('/dashboard', [AdminDashboardController::class, 'index'])
+            Route::get('/dashboard', [PemilikDashboardController::class, 'index'])
                 ->name('dashboard');
 
 

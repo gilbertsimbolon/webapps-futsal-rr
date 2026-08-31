@@ -16,7 +16,7 @@
     <!-- Filter & Pencarian -->
     <div class="card border-0 shadow-sm mb-4">
         <div class="card-body p-3">
-            <form action="{{ route('pengguna.index') }}" method="GET" class="row g-2 align-items-center">
+            <form action="{{ route('admin.pengguna.index') }}" method="GET" class="row g-2 align-items-center">
                 <div class="col-12 col-md-4">
                     <div class="input-group input-group-merge">
                         <span class="input-group-text"><i class="bx bx-search"></i></span>
@@ -46,7 +46,7 @@
                         <i class="bx bx-filter-alt me-1"></i> Filter
                     </button>
                     @if (request()->hasAny(['search', 'role', 'status']))
-                        <a href="{{ route('pengguna.index') }}" class="btn btn-outline-secondary" title="Reset Filter">
+                        <a href="{{ route('admin.pengguna.index') }}" class="btn btn-outline-secondary" title="Reset Filter">
                             <i class="bx bx-reset"></i>
                         </a>
                     @endif
@@ -92,7 +92,7 @@
                                 @if (strtolower($userRole) == 'admin')
                                     <span class="badge bg-label-danger"><i class="bx bx-shield-quarter me-1"></i>
                                         Admin</span>
-                                @elseif (strtolower($userRole) == 'owner')
+                                @elseif (strtolower($userRole) == 'pemilik')
                                     <span class="badge bg-label-warning"><i class="bx bx-building-house me-1"></i>
                                         Pemilik</span>
                                 @elseif (strtolower($userRole) == 'pelanggan')
@@ -104,7 +104,7 @@
                             <td>
                                 <!-- Switch Toggle Status -->
                                 <form id="form-toggle-{{ $user->id }}"
-                                    action="{{ route('pengguna.toggle-status', $user->id) }}" method="POST"
+                                    action="{{ route('admin.pengguna.toggle-status', $user->id) }}" method="POST"
                                     class="m-0">
                                     @csrf
                                     @method('PATCH')

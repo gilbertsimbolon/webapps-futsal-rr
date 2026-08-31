@@ -61,7 +61,7 @@ class PenggunaController extends Controller
         // Assign role Spatie
         $user->assignRole($validated['role']);
 
-        return redirect()->route('pengguna.index')->with('success', 'Pengguna baru berhasil ditambahkan.');
+        return redirect()->route('admin.pengguna.index')->with('success', 'Pengguna baru berhasil ditambahkan.');
     }
 
     // fungsi memperbarui data
@@ -90,7 +90,7 @@ class PenggunaController extends Controller
         // Sync role Spatie
         $user->syncRoles([$validated['role']]);
 
-        return redirect()->route('pengguna.index')->with('success', 'Data pengguna berhasil diperbarui.');
+        return redirect()->route('admin.pengguna.index')->with('success', 'Data pengguna berhasil diperbarui.');
     }
 
     // fungsi memperbarui status akun
@@ -100,18 +100,18 @@ class PenggunaController extends Controller
         $newStatus = ($user->status === 'aktif') ? 'nonaktif' : 'aktif';
         $user->update(['status' => $newStatus]);
 
-        return redirect()->route('pengguna.index')->with('success', "Status akun {$user->name} berhasil diubah menjadi {$newStatus}.");
+        return redirect()->route('admin.pengguna.index')->with('success', "Status akun {$user->name} berhasil diubah menjadi {$newStatus}.");
     }
 
     // fungsi menghapus data
     public function destroy(User $user, string $id)
     {
         if (auth()->id() === $user->id) {
-            return redirect()->route('pengguna.index')->with('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
+            return redirect()->route('admin.pengguna.index')->with('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
         }
 
         $user->delete();
 
-        return redirect()->route('pengguna.index')->with('success', 'Pengguna berhasil dihapus.');
+        return redirect()->route('admin.pengguna.index')->with('success', 'Pengguna berhasil dihapus.');
     }
 }

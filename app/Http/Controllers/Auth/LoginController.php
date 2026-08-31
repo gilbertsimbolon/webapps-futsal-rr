@@ -57,7 +57,7 @@ class LoginController extends Controller
         }
 
         if ($user->hasRole('pemilik')) {
-            return redirect()->route('owner.dashboard');
+            return redirect()->route('pemilik.dashboard');
         }
 
         if ($user->hasRole('pelanggan')) {

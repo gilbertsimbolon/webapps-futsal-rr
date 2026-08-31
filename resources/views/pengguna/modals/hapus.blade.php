@@ -1,6 +1,6 @@
 <div class="modal fade" id="modalDeleteUser{{ $user->id }}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <form class="modal-content" action="{{ route('pengguna.destroy', $user->id) }}" method="POST">
+        <form class="modal-content" action="{{ route('admin.pengguna.destroy', $user->id) }}" method="POST">
             @csrf
             @method('DELETE')
             <div class="modal-header">
