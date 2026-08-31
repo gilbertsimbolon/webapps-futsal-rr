@@ -37,7 +37,7 @@ class LoginController extends Controller
                 return back()->withErrors(['email' => 'Akun Anda sedang dinonaktifkan. Silakan hubungi admin.']);
             }
 
-            return redirect()->route('dashboard');
+            return redirect()->route('dashboard.admin');
         }
 
         // jika gagal

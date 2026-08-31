@@ -91,34 +91,6 @@
             </a>
         </li>
 
-        <!-- Menu Pelanggan -->
-        <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">Menu Pelanggan</span>
-        </li>
-
-        <li class="menu-item {{ request()->routeIs('sewa.*') ? 'active' : '' }}">
-            {{-- <a href="{{ route('sewa.index') }}" class="menu-link px-3"> --}}
-            <a href="#" class="menu-link px-3">
-                <i class="menu-icon tf-icons bx bx-search-alt"></i>
-                <div data-i18n="Cari & Sewa">Cari & Sewa Lapangan</div>
-            </a>
-        </li>
-
-        <li class="menu-item {{ request()->routeIs('kalender.*') ? 'active' : '' }}">
-            {{-- <a href="{{ route('kalender.index') }}" class="menu-link px-3"> --}}
-            <a href="#" class="menu-link px-3">
-                <i class="menu-icon tf-icons bx bx-calendar"></i>
-                <div data-i18n="Kalender Ketersediaan">Kalender Ketersediaan</div>
-            </a>
-        </li>
-
-        <li class="menu-item">
-            <a href="#" class="menu-link px-3">
-                <i class="menu-icon tf-icons bx bx-history"></i>
-                <div data-i18n="Riwayat Booking">Riwayat Booking Saya</div>
-            </a>
-        </li>
-
         <!-- Kelola Venue (Menu Owner) -->
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Kelola Venue (Owner)</span>
