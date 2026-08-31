@@ -226,7 +226,7 @@
             </div>
         </a>
 
-        <form action="#" method="POST" class="w-100 m-0">
+        <form action="{{ route('logout') }}" method="POST" class="w-100 m-0">
             @csrf
             <button type="submit"
                 class="btn btn-outline-danger btn-sm w-100 d-flex align-items-center justify-content-center p-2"
