@@ -184,31 +184,10 @@
             <span class="menu-header-text">Laporan</span>
         </li>
 
-        <li class="menu-item">
-            <a href="#" class="menu-link px-3">
+        <li class="menu-item {{ request()->routeIs('laporan.booking') ? 'active' : '' }}">
+            <a href="{{ route('laporan.booking') }}" class="menu-link px-3">
                 <i class="menu-icon tf-icons bx bx-file"></i>
                 <div data-i18n="Laporan Booking">Laporan Booking</div>
-            </a>
-        </li>
-
-        <li class="menu-item">
-            <a href="#" class="menu-link px-3">
-                <i class="menu-icon tf-icons bx bx-bar-chart-alt-2"></i>
-                <div data-i18n="Laporan Pendapatan">Laporan Pendapatan</div>
-            </a>
-        </li>
-
-        <li class="menu-item">
-            <a href="#" class="menu-link px-3">
-                <i class="menu-icon tf-icons bx bx-grid-alt"></i>
-                <div data-i18n="Laporan Lapangan">Laporan Lapangan</div>
-            </a>
-        </li>
-
-        <li class="menu-item">
-            <a href="#" class="menu-link px-3">
-                <i class="menu-icon tf-icons bx bx-user-pin"></i>
-                <div data-i18n="Laporan Pelanggan">Laporan Pelanggan</div>
             </a>
         </li>
 

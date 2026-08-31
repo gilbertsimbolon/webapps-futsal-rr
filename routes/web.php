@@ -8,6 +8,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CabangController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\LapanganController;
+use App\Http\Controllers\LaporanBookingController;
 use App\Http\Controllers\MetodePembayaranController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\ProfilController;
@@ -105,4 +106,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/round-robin/simulasi', [RoundRobinController::class, 'simulation'])->name('round-robin.simulation');
     Route::post('/round-robin/enqueue', [RoundRobinController::class, 'enqueueSimulation'])->name('round-robin.enqueue');
     Route::patch('/round-robin/rotate/{queue}', [RoundRobinController::class, 'forceRotate'])->name('round-robin.rotate');
+
+    // Route Laporan
+    Route::get('/laporan/booking', [LaporanBookingController::class, 'index'])->name('laporan.booking');
 });
