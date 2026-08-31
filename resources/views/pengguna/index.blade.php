@@ -92,7 +92,7 @@
                                 @if (strtolower($userRole) == 'admin')
                                     <span class="badge bg-label-danger"><i class="bx bx-shield-quarter me-1"></i>
                                         Admin</span>
-                                @elseif (strtolower($userRole) == 'pemilik')
+                                @elseif (strtolower($userRole) == 'owner')
                                     <span class="badge bg-label-warning"><i class="bx bx-building-house me-1"></i>
                                         Pemilik</span>
                                 @elseif (strtolower($userRole) == 'pelanggan')

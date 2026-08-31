@@ -7,12 +7,15 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CabangController;
 use App\Http\Controllers\JadwalController;
+use App\Http\Controllers\KalenderKetersediaanController;
 use App\Http\Controllers\LapanganController;
 use App\Http\Controllers\LaporanBookingController;
 use App\Http\Controllers\MetodePembayaranController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\ProfilController;
+use App\Http\Controllers\RiwayatBookingController;
 use App\Http\Controllers\RoundRobinController;
+use App\Http\Controllers\SewaLapanganController;
 use Illuminate\Support\Facades\Route;
 
 // Route Login
@@ -109,4 +112,17 @@ Route::middleware('auth')->group(function () {
 
     // Route Laporan
     Route::get('/laporan/booking', [LaporanBookingController::class, 'index'])->name('laporan.booking');
+
+    // Route Costumer
+
+    // Route Sewa dan Cari Lapangan
+    Route::get('/cari-lapangan', [SewaLapanganController::class, 'index'])->name('sewa.index');
+    Route::get('/sewa/{field}', [SewaLapanganController::class, 'create'])->name('sewa.create');
+
+    // Route Kalender
+    Route::get('/kalender-ketersediaan', [KalenderKetersediaanController::class, 'index'])->name('kalender.index');
+
+    // Route Riwayat Booking
+    Route::get('/riwayat-booking', [RiwayatBookingController::class, 'index'])->name('riwayat.index');
+    Route::patch('/riwayat-booking/{booking}/cancel', [RiwayatBookingController::class, 'cancel'])->name('riwayat.cancel');
 });

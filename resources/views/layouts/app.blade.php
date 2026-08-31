@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
-    <!-- Boxicons (PENTING untuk Icon Sneat Sidebar) -->
+    <!-- Boxicons (PENTING untuk Icon Sneat & Nav Mobile) -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
     <!-- Fonts -->
@@ -41,19 +41,41 @@
     <!-- Helpers & Config -->
     <script src="{{ asset('sneat/assets/vendor/js/helpers.js') }}"></script>
     <script src="{{ asset('sneat/assets/js/config.js') }}"></script>
+
     <style>
         .swal2-container {
             z-index: 2000 !important;
         }
+
+        /* Penyesuaian Layout jika yang login adalah Pelanggan (Gaya Mobile App) */
+        @auth
+            @role('pelanggan')
+                .layout-page {
+                    padding-left: 0 !important;
+                }
+                .content-wrapper {
+                    padding-bottom: 75px !important;
+                }
+            @endrole
+        @endauth
     </style>
+
+    @stack('styles')
 </head>
 
 <body>
     <div class="layout-wrapper layout-content-navbar">
         <div class="layout-container">
 
+            {{-- Sidebar hanya ditampilkan jika bukan mode hideLayout dan BUKAN Pelanggan --}}
             @if (!isset($hideLayout) || !$hideLayout)
-                @include('partials.sidebar')
+                @auth
+                    @hasanyrole('admin|owner')
+                        @include('partials.sidebar')
+                    @endhasanyrole
+                @else
+                    @include('partials.sidebar')
+                @endauth
             @endif
 
             <div class="layout-page">
@@ -78,6 +100,13 @@
             </div>
         </div>
     </div>
+
+    {{-- Bottom Navigation Bar Khusus Role Pelanggan --}}
+    @auth
+        @role('pelanggan')
+            @include('layouts.customer-bottom-nav')
+        @endrole
+    @endauth
 
     <!-- Core JS -->
     <script src="{{ asset('sneat/assets/vendor/libs/jquery/jquery.js') }}"></script>
