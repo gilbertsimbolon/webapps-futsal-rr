@@ -17,7 +17,7 @@
                             <p class="mb-1 small"><strong>Unit Lapangan:</strong> {{ $booking->field?->field_name ?? '-' }}</p>
                             <p class="mb-1 small"><strong>Tanggal Main:</strong> {{ $booking->booking_date ? $booking->booking_date->format('d F Y') : '-' }}</p>
                             <p class="mb-1 small"><strong>Jadwal Main:</strong> {{ $startTime }} - {{ $endTime }} WITA</p>
-                            <p class="mb-1 small"><strong>Metode Bayar:</strong> <span class="badge bg-label-secondary text-uppercase">{{ $booking->payment_method }}</span></p>
+                            <p class="mb-1 small"><strong>Metode Bayar:</strong> <span class="badge bg-label-secondary text-uppercase">{{ $booking->paymentMethod?->name ?? ($booking->payment_method ?? '-') }}</span></p>
                             <p class="mb-1 small"><strong>Status Check-in:</strong>
                                 @if ($booking->check_in_at)
                                     <span class="badge bg-label-success">Hadir ({{ $booking->check_in_at->format('H:i') }} WITA)</span>
@@ -53,7 +53,7 @@
                                     </div>
                                     <h6 class="text-muted mb-1 fw-semibold" style="font-size: 13px;">Tidak Ada Berkas</h6>
                                     <p class="text-muted small mb-0 px-2">
-                                        {{ strtolower($booking->payment_method) === 'cash' ? 'Pembayaran Tunai di Lokasi (Cash)' : 'Pelanggan belum mengunggah bukti transfer.' }}
+                                        {{ ($booking->paymentMethod && $booking->paymentMethod->type === 'cash') || strtolower($booking->payment_method ?? '') === 'cash' ? 'Pembayaran Tunai di Lokasi (Cash)' : 'Pelanggan belum mengunggah bukti transfer.' }}
                                     </p>
                                 @endif
                             </div>

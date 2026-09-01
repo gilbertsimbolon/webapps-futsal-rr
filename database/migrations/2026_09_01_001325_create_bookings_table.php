@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignId('schedule_id')->constrained('schedules')->onDelete('cascade');
             $table->date('booking_date');
             $table->decimal('total_amount', 12, 2);
-            $table->string('payment_method');
+            $table->foreignId('payment_method_id')->constrained('payment_methods')->onDelete('cascade');
             $table->string('payment_proof')->nullable();
             $table->enum('status', ['pending', 'confirmed', 'paid', 'completed', 'cancelled'])->default('pending');
             $table->text('notes')->nullable();

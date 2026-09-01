@@ -10,9 +10,10 @@ use Illuminate\Support\Facades\Hash;
 class RegisterController extends Controller
 {
     // fungsi index
-    public function index()
+    public function index(Request $request)
     {
-        return view('auth.register');
+        $returnTo = $request->get('return_to');
+        return view('auth.register', compact('returnTo'));
     }
 
     // fungsi registrasi, (store)
@@ -22,6 +23,7 @@ class RegisterController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
+            'phone' => 'nullable|string|max:20',
             'password' => 'required|string|min:8|confirmed',
         ], [
             'name.required' => 'Kolom nama wajib diisi.',
@@ -37,12 +39,18 @@ class RegisterController extends Controller
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
+            'phone' => $validated['phone'] ?? null,
             'password' => Hash::make($validated['password']),
         ]);
 
         $user->assignRole('pelanggan');
 
-        // kembalikan ke halaman login
+        // Otomatis login atau kembalikan ke halaman login
+        if ($request->filled('return_to')) {
+            return redirect()->route('login.index', ['return_to' => $request->return_to])
+                ->with('success', 'Registrasi berhasil! Silakan login untuk melanjutkan booking.');
+        }
+
         return redirect()->route('login.index')->with('success', 'Registrasi berhasil! Silakan login.');
     }
 }

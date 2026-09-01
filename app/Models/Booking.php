@@ -26,7 +26,7 @@ class Booking extends Model
         'dp_amount',
         'remaining_amount',
         'payment_type',
-        'payment_method',
+        'payment_method_id',
         'payment_proof',
         'status',
         'notes',
@@ -70,5 +70,11 @@ class Booking extends Model
     public function schedule()
     {
         return $this->belongsTo(Schedule::class);
+    }
+
+    // relasi ke metode pembayaran
+    public function paymentMethod()
+    {
+        return $this->belongsTo(PaymentMethod::class);
     }
 }

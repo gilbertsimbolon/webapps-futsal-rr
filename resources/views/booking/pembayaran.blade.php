@@ -94,7 +94,7 @@
                     </div>
                     <div class="col-12 col-sm-6">
                         <small class="text-muted d-block mb-1">Metode Pembayaran</small>
-                        <span class="badge bg-label-secondary text-uppercase">{{ $booking->payment_method }}</span>
+                        <span class="badge bg-label-secondary text-uppercase">{{ $booking->paymentMethod?->name ?? ($booking->payment_method ?? '-') }}</span>
                     </div>
                     <div class="col-12 col-sm-6">
                         <small class="text-muted d-block mb-1">Catatan</small>

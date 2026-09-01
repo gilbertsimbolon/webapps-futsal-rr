@@ -1,6 +1,6 @@
 <div class="modal fade" id="modalDeleteBooking{{ $booking->id }}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <form class="modal-content" action="{{ route('bookings.destroy', $booking->id) }}" method="POST">
+        <form class="modal-content" action="{{ route('pemilik.bookings.destroy', $booking->id) }}" method="POST">
             @csrf
             @method('DELETE')
             <div class="modal-header">

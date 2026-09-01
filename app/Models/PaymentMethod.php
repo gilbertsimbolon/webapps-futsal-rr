@@ -25,4 +25,10 @@ class PaymentMethod extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    // relasi ke booking
+    public function booking()
+    {
+        return $this->hasMany(Booking::class);
+    }
 }

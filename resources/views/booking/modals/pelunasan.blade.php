@@ -59,11 +59,12 @@
                             <div class="mb-3">
                                 <label class="form-label fw-semibold text-dark">Metode Pembayaran <span
                                         class="text-danger">*</span></label>
-                                <select name="payment_method" id="table_pos_method" class="form-select" required>
-                                    <option value="cash" selected>Tunai (Cash di Lokasi)</option>
+                                <select name="payment_method_id" id="table_pos_method" class="form-select" required>
+                                    <option value="">-- Pilih Metode Pembayaran --</option>
                                     @foreach ($paymentMethods as $pm)
-                                        <option value="{{ $pm->code ?? $pm->name }}">{{ $pm->name }}
-                                            ({{ strtoupper($pm->type ?? 'Transfer') }})</option>
+                                        <option value="{{ $pm->id }}" data-type="{{ $pm->type }}" {{ $pm->type === 'cash' ? 'selected' : '' }}>
+                                            {{ $pm->name }} ({{ strtoupper($pm->type === 'cash' ? 'Tunai' : ($pm->type === 'qris' ? 'QRIS' : 'Transfer')) }})
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>

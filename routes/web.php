@@ -6,8 +6,10 @@ use App\Http\Controllers\Auth\LupaPasswordController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CabangController;
+use App\Http\Controllers\CustomerBookingController;
 use App\Http\Controllers\Dashboard\AdminDashboardController;
 use App\Http\Controllers\Dashboard\PemilikDashboardController;
+use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\KalenderKetersediaanController;
 use App\Http\Controllers\LapanganController;
@@ -18,11 +20,37 @@ use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\RiwayatBookingController;
 use App\Http\Controllers\RoundRobinController;
 use App\Http\Controllers\SewaLapanganController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/link', function () {
+    Artisan::call('storage:link');
+    return 'Symlink berhasil dibuat!';
+});
+
+
+// ==========================================
+// PUBLIK / GUEST (LANDING & KATALOG LAPANGAN)
+// ==========================================
+
+Route::get('/', [FrontendController::class, 'index'])
+    ->name('landing');
+
+Route::get('/lapangan', [FrontendController::class, 'fields'])
+    ->name('lapangan.index');
+
+Route::get('/lapangan/{field}', [FrontendController::class, 'fieldDetail'])
+    ->name('lapangan.detail');
+
+Route::post('/api/lapangan/{field}/slots', [FrontendController::class, 'getFieldSlots'])
+    ->name('lapangan.slots');
 
 // Login
 
 Route::get('/login', [LoginController::class, 'index'])
+    ->name('login');
+
+Route::get('/masuk', [LoginController::class, 'index'])
     ->name('login.index');
 
 Route::post('/login', [LoginController::class, 'store'])
@@ -286,10 +314,10 @@ Route::middleware('auth')->group(function () {
 
             // Pembayaran Booking
 
-            Route::get('/booking/bayar/{booking_code}', [BookingController::class, 'showPayment'])
+            Route::get('/booking/bayar/{booking_code}', [CustomerBookingController::class, 'showPayment'])
                 ->name('booking.payment');
 
-            Route::post('/booking/bayar/{booking}/upload', [BookingController::class, 'uploadPaymentProof'])
+            Route::post('/booking/bayar/{booking}/upload', [CustomerBookingController::class, 'uploadPaymentProof'])
                 ->name('booking.upload-proof');
 
 
@@ -301,7 +329,7 @@ Route::middleware('auth')->group(function () {
 
 
     // ==========================================
-    // PELANGGAN
+    // PELANGGAN (AUTHENTICATED CUSTOMER)
     // ==========================================
 
     Route::prefix('pelanggan')
@@ -309,27 +337,35 @@ Route::middleware('auth')->group(function () {
         ->name('pelanggan.')
         ->group(function () {
 
-            // Cari Lapangan
+            // Booking Flow Pelanggan
+            Route::get('/booking/{field}', [CustomerBookingController::class, 'create'])
+                ->name('booking.create');
 
-            Route::get('/cari-lapangan', [SewaLapanganController::class, 'index'])
-                ->name('sewa.index');
+            Route::post('/booking', [CustomerBookingController::class, 'store'])
+                ->name('booking.store');
 
-            Route::get('/sewa/{field}', [SewaLapanganController::class, 'create'])
-                ->name('sewa.create');
+            Route::get('/booking/bayar/{booking_code}', [CustomerBookingController::class, 'showPayment'])
+                ->name('booking.payment');
 
+            Route::post('/booking/bayar/{booking}/upload', [CustomerBookingController::class, 'uploadPaymentProof'])
+                ->name('booking.upload-proof');
 
-            // Kalender Ketersediaan
-
-            Route::get('/kalender-ketersediaan', [KalenderKetersediaanController::class, 'index'])
-                ->name('kalender.index');
-
-
-            // Riwayat Booking
-
+            // Riwayat Booking Saya
             Route::get('/riwayat-booking', [RiwayatBookingController::class, 'index'])
                 ->name('riwayat.index');
 
             Route::patch('/riwayat-booking/{booking}/cancel', [RiwayatBookingController::class, 'cancel'])
                 ->name('riwayat.cancel');
+
+            // Kalender Ketersediaan
+            Route::get('/kalender-ketersediaan', [KalenderKetersediaanController::class, 'index'])
+                ->name('kalender.index');
+
+            // Redirects / Aliases
+            Route::get('/cari-lapangan', fn() => redirect()->route('lapangan.index'))
+                ->name('sewa.index');
+
+            Route::get('/sewa/{field}', fn($field) => redirect()->route('pelanggan.booking.create', $field))
+                ->name('sewa.create');
         });
 });

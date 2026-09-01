@@ -1,6 +1,6 @@
 <div class="modal fade" id="modalStatusBooking{{ $booking->id }}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <form class="modal-content" action="{{ route('bookings.update-status', $booking->id) }}" method="POST">
+        <form class="modal-content" action="{{ route('pemilik.bookings.update-status', $booking->id) }}" method="POST">
             @csrf
             @method('PATCH')
             <div class="modal-header">

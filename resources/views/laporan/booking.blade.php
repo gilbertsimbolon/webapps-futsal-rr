@@ -50,6 +50,7 @@
         <h3 class="fw-bold mb-1">BKNGFTSL - SISTEM RESERVASI LAPANGAN FUTSAL</h3>
         <h5 class="mb-1">Laporan Riwayat Booking Transaksi</h5>
         <small class="text-muted">
+            Pemilik Venue: {{ auth()->user()->name }} |
             Periode: {{ \Carbon\Carbon::parse($startDate)->translatedFormat('d F Y') }} s/d
             {{ \Carbon\Carbon::parse($endDate)->translatedFormat('d F Y') }}
         </small>
@@ -78,45 +79,48 @@
     <div class="card border-0 shadow-sm mb-3 card-filter">
         <div class="card-body p-3">
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
-                <div class="d-flex align-items-center gap-2">
+                <div class="d-flex flex-wrap align-items-center gap-2">
                     <span class="small fw-semibold text-muted text-uppercase me-2"><i
-                            class="bx bx-calendar-alt me-1"></i>Pilih Rentang Cepat:</span>
-                    <a href="{{ route('laporan.booking', ['periode' => 'mingguan', 'branch_id' => request('branch_id'), 'status' => request('status')]) }}"
+                            class="bx bx-calendar-alt me-1"></i>Rentang Cepat:</span>
+                    <a href="{{ route('pemilik.laporan.booking', array_merge(request()->query(), ['periode' => 'mingguan', 'start_date' => null, 'end_date' => null])) }}"
                         class="btn btn-sm {{ $periode === 'mingguan' ? 'btn-primary shadow-sm' : 'btn-outline-secondary' }}">
                         Minggu Ini
                     </a>
-                    <a href="{{ route('laporan.booking', ['periode' => 'bulanan', 'branch_id' => request('branch_id'), 'status' => request('status')]) }}"
+                    <a href="{{ route('pemilik.laporan.booking', array_merge(request()->query(), ['periode' => 'bulanan', 'start_date' => null, 'end_date' => null])) }}"
                         class="btn btn-sm {{ $periode === 'bulanan' ? 'btn-primary shadow-sm' : 'btn-outline-secondary' }}">
                         Bulan Ini
                     </a>
-                    <a href="{{ route('laporan.booking', ['periode' => 'tahunan', 'branch_id' => request('branch_id'), 'status' => request('status')]) }}"
+                    <a href="{{ route('pemilik.laporan.booking', array_merge(request()->query(), ['periode' => 'tahunan', 'start_date' => null, 'end_date' => null])) }}"
                         class="btn btn-sm {{ $periode === 'tahunan' ? 'btn-primary shadow-sm' : 'btn-outline-secondary' }}">
                         Tahun Ini
                     </a>
                 </div>
                 <span class="badge bg-label-info py-2 px-3 fs-7">
-                    Aktif: {{ \Carbon\Carbon::parse($startDate)->translatedFormat('d M Y') }} -
+                    <i class="bx bx-time-five me-1"></i>Aktif:
+                    {{ \Carbon\Carbon::parse($startDate)->translatedFormat('d M Y') }} s/d
                     {{ \Carbon\Carbon::parse($endDate)->translatedFormat('d M Y') }}
                 </span>
             </div>
         </div>
     </div>
 
-    <!-- Form Filter Kustom & Cabang -->
+    <!-- Form Filter Lengkap (Tanggal, Cabang, Lapangan, Status, Pencarian) -->
     <div class="card border-0 shadow-sm mb-4 card-filter">
         <div class="card-body p-3">
-            <form action="{{ route('laporan.booking') }}" method="GET" class="row g-2 align-items-center">
-                <div class="col-12 col-md-3">
+            <form action="{{ route('pemilik.laporan.booking') }}" method="GET" class="row g-2 align-items-end">
+                <div class="col-12 col-sm-6 col-md-2">
                     <label class="form-label small fw-semibold mb-1">Dari Tanggal</label>
-                    <input type="date" name="start_date" class="form-control" value="{{ $startDate }}" required>
+                    <input type="date" name="start_date" class="form-control form-control-sm"
+                        value="{{ $startDate }}" required>
                 </div>
-                <div class="col-12 col-md-3">
+                <div class="col-12 col-sm-6 col-md-2">
                     <label class="form-label small fw-semibold mb-1">Sampai Tanggal</label>
-                    <input type="date" name="end_date" class="form-control" value="{{ $endDate }}" required>
+                    <input type="date" name="end_date" class="form-control form-control-sm" value="{{ $endDate }}"
+                        required>
                 </div>
-                <div class="col-12 col-md-2">
+                <div class="col-12 col-sm-6 col-md-2">
                     <label class="form-label small fw-semibold mb-1">Cabang Venue</label>
-                    <select name="branch_id" class="form-select">
+                    <select name="branch_id" class="form-select form-select-sm">
                         <option value="">-- Semua Cabang --</option>
                         @foreach ($branches as $branch)
                             <option value="{{ $branch->id }}"
@@ -126,9 +130,20 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-12 col-md-2">
-                    <label class="form-label small fw-semibold mb-1">Status</label>
-                    <select name="status" class="form-select">
+                <div class="col-12 col-sm-6 col-md-2">
+                    <label class="form-label small fw-semibold mb-1">Unit Lapangan</label>
+                    <select name="field_id" class="form-select form-select-sm">
+                        <option value="">-- Semua Lapangan --</option>
+                        @foreach ($fields as $field)
+                            <option value="{{ $field->id }}" {{ request('field_id') == $field->id ? 'selected' : '' }}>
+                                {{ $field->field_name }} ({{ $field->branch?->branch_name }})
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-12 col-sm-6 col-md-2">
+                    <label class="form-label small fw-semibold mb-1">Status Bayar</label>
+                    <select name="status" class="form-select form-select-sm">
                         <option value="">-- Semua Status --</option>
                         <option value="paid" {{ request('status') == 'paid' ? 'selected' : '' }}>Lunas 100%</option>
                         <option value="confirmed" {{ request('status') == 'confirmed' ? 'selected' : '' }}>DP 50%</option>
@@ -138,8 +153,16 @@
                         <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Batal</option>
                     </select>
                 </div>
-                <div class="col-12 col-md-2 d-flex align-items-end pt-3">
-                    <button type="submit" class="btn btn-primary w-100">
+                <div class="col-12 col-sm-6 col-md-2">
+                    <label class="form-label small fw-semibold mb-1">Pencarian</label>
+                    <input type="text" name="search" class="form-control form-control-sm"
+                        placeholder="Kode / Tim / No HP" value="{{ request('search') }}">
+                </div>
+                <div class="col-12 d-flex justify-content-end gap-2 pt-2">
+                    <a href="{{ route('pemilik.laporan.booking') }}" class="btn btn-sm btn-outline-secondary">
+                        <i class="bx bx-reset me-1"></i> Reset
+                    </a>
+                    <button type="submit" class="btn btn-sm btn-primary">
                         <i class="bx bx-filter-alt me-1"></i> Terapkan Filter
                     </button>
                 </div>
@@ -180,10 +203,12 @@
             </div>
         </div>
         <div class="col-6 col-md-4 col-lg-2">
-            <div class="card border-0 shadow-sm p-3 bg-white rounded-3 border-start border-dark border-4 h-100">
-                <small class="text-muted d-block fw-semibold text-uppercase" style="font-size: 11px;">Total Biaya
-                    Sewa</small>
-                <h5 class="fw-bold text-primary mb-0 mt-1">Rp {{ number_format($totalBiaya, 0, ',', '.') }}</h5>
+            <div class="card border-0 shadow-sm p-3 bg-white rounded-3 border-start border-warning border-4 h-100">
+                <small class="text-muted d-block fw-semibold text-uppercase" style="font-size: 11px;">Uang Masuk
+                    Riil</small>
+                <h5 class="fw-bold text-success mb-0 mt-1">Rp {{ number_format($totalPendapatanMasuk, 0, ',', '.') }}</h5>
+                <small class="text-muted" style="font-size: 10px;">Total Sewa: Rp
+                    {{ number_format($totalBiaya, 0, ',', '.') }}</small>
             </div>
         </div>
     </div>
@@ -192,10 +217,11 @@
     <div class="card border-0 shadow-sm">
         <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
             <h6 class="mb-0 fw-bold">
-                Detail Laporan: {{ \Carbon\Carbon::parse($startDate)->translatedFormat('d M Y') }} s/d
+                <i class="bx bx-list-ul me-1 text-primary"></i> Detail Transaksi:
+                {{ \Carbon\Carbon::parse($startDate)->translatedFormat('d M Y') }} s/d
                 {{ \Carbon\Carbon::parse($endDate)->translatedFormat('d M Y') }}
             </h6>
-            <span class="badge bg-label-primary">{{ $bookings->count() }} Data Ditemukan</span>
+            <span class="badge bg-label-primary">{{ $bookings->count() }} Data Transaksi</span>
         </div>
         <div class="table-responsive text-nowrap">
             <table class="table table-hover align-middle mb-0">
@@ -207,6 +233,7 @@
                         <th>NAMA TIM / PEMESAN</th>
                         <th>LAPANGAN</th>
                         <th>CABANG VENUE</th>
+                        <th>METODE BAYAR</th>
                         <th>BIAYA SEWA</th>
                         <th>STATUS BAYAR</th>
                     </tr>
@@ -249,10 +276,31 @@
                                 <span class="fw-semibold text-dark">{{ $booking->branch?->branch_name ?? '-' }}</span>
                             </td>
                             <td>
+                                @php
+                                    $pmName = $booking->paymentMethod?->name ?? ($booking->payment_method ?? '-');
+                                    $pmType = $booking->paymentMethod?->type ?? 'other';
+                                @endphp
+                                @if ($pmType === 'cash' || str_contains(strtolower($pmName), 'tunai') || str_contains(strtolower($pmName), 'cash'))
+                                    <span class="badge bg-label-success"><i
+                                            class="bx bx-money me-1"></i>{{ $pmName }}</span>
+                                @elseif ($pmType === 'qris' || str_contains(strtolower($pmName), 'qris'))
+                                    <span class="badge bg-label-primary"><i
+                                            class="bx bx-qr me-1"></i>{{ $pmName }}</span>
+                                @elseif (
+                                    $pmType === 'bank_transfer' ||
+                                        str_contains(strtolower($pmName), 'bank') ||
+                                        str_contains(strtolower($pmName), 'transfer'))
+                                    <span class="badge bg-label-info"><i
+                                            class="bx bx-credit-card me-1"></i>{{ $pmName }}</span>
+                                @else
+                                    <span class="badge bg-label-secondary">{{ $pmName }}</span>
+                                @endif
+                            </td>
+                            <td>
                                 <span class="fw-bold text-dark">Rp
                                     {{ number_format($booking->total_amount, 0, ',', '.') }}</span>
                                 @if ($booking->status === 'confirmed')
-                                    <br><small class="text-info fw-semibold">DP: Rp
+                                    <br><small class="text-info fw-semibold">DP Masuk: Rp
                                         {{ number_format($booking->dp_amount > 0 ? $booking->dp_amount : $booking->total_amount * 0.5, 0, ',', '.') }}</small>
                                 @endif
                             </td>
@@ -273,7 +321,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="text-center py-5 text-muted">
+                            <td colspan="9" class="text-center py-5 text-muted">
                                 <div
                                     class="avatar avatar-md bg-label-secondary mx-auto mb-2 rounded-circle d-flex align-items-center justify-content-center">
                                     <i class="bx bx-calendar-x fs-3 text-secondary"></i>

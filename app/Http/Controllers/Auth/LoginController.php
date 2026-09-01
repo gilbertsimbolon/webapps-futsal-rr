@@ -9,9 +9,10 @@ use Illuminate\Support\Facades\Auth;
 class LoginController extends Controller
 {
     // Halaman login
-    public function index()
+    public function index(Request $request)
     {
-        return view('auth.login');
+        $returnTo = $request->get('return_to');
+        return view('auth.login', compact('returnTo'));
     }
 
     // Proses login
@@ -61,7 +62,10 @@ class LoginController extends Controller
         }
 
         if ($user->hasRole('pelanggan')) {
-            return redirect()->route('sewa.index');
+            if ($request->filled('return_to')) {
+                return redirect($request->return_to);
+            }
+            return redirect()->intended(route('landing'));
         }
 
         // Jika role tidak dikenali
