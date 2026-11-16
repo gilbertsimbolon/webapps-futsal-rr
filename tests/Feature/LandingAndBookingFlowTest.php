@@ -167,4 +167,78 @@ class LandingAndBookingFlowTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Riwayat dan Status Booking Saya');
     }
+
+    public function test_slots_display_all_schedules_with_three_statuses_and_team_name()
+    {
+        $tomorrow = Carbon::tomorrow()->toDateString();
+
+        // Buat schedule aktif untuk field
+        \App\Models\Schedule::firstOrCreate(
+            ['field_id' => $this->field->id, 'day' => 'all', 'start_time' => '10:00:00'],
+            ['end_time' => '11:00:00', 'status' => 'active']
+        );
+        \App\Models\Schedule::firstOrCreate(
+            ['field_id' => $this->field->id, 'day' => 'all', 'start_time' => '11:00:00'],
+            ['end_time' => '12:00:00', 'status' => 'active']
+        );
+
+        \App\Models\Booking::where('booking_code', 'like', 'BKNG-TEST-TEAM%')->delete();
+
+        // Buat booking terisi dengan nama tim
+        \App\Models\Booking::create([
+            'booking_code'      => 'BKNG-TEST-TEAM-' . uniqid(),
+            'user_id'           => $this->owner->id,
+            'branch_id'         => $this->branch->id,
+            'field_id'          => $this->field->id,
+            'booking_date'      => $tomorrow,
+            'start_time'        => '10:00:00',
+            'end_time'          => '11:00:00',
+            'total_amount'      => 150000,
+            'payment_type'      => 'full',
+            'payment_method_id' => $this->paymentMethod->id,
+            'status'            => 'confirmed',
+            'notes'             => 'Walk-in (Rajawali FC)',
+        ]);
+
+        // Cek endpoint slots
+        $response = $this->postJson('/api/lapangan/' . $this->field->id . '/slots', [
+            'date' => $tomorrow,
+        ]);
+
+        $response->assertStatus(200);
+        $data = $response->json('data');
+
+        // Cari slot 10:00
+        $slot10 = collect($data)->firstWhere('start_time', '10:00');
+        $this->assertNotNull($slot10);
+        $this->assertEquals('terisi', $slot10['status']);
+        $this->assertEquals('Rajawali FC', $slot10['team_name']);
+
+        // Cari slot kosong berikutnya
+        $slot11 = collect($data)->firstWhere('start_time', '11:00');
+        $this->assertNotNull($slot11);
+        $this->assertEquals('kosong', $slot11['status']);
+    }
+
+    public function test_booking_create_page_has_no_numbered_headers_and_has_date_pills_and_checkboxes()
+    {
+        $response = $this->actingAs($this->customer)->get('/pelanggan/booking/' . $this->field->id);
+        $response->assertStatus(200);
+
+        // Pastikan tidak ada header poin 1., 2., 3.
+        $response->assertDontSee('1. Jadwal & Durasi Bermain');
+        $response->assertDontSee('2. Skema Pembayaran');
+        $response->assertDontSee('3. Metode Pembayaran Resmi Venue');
+
+        // Pastikan header bersih ditampilkan
+        $response->assertSee('Jadwal Bermain');
+        $response->assertSee('Skema Pembayaran');
+        $response->assertSee('Metode Pembayaran Resmi Venue');
+
+        // Pastikan elemen date pills dan slot checkbox tersedia
+        $response->assertSee('date-scroll-container');
+        $response->assertSee('slot-check-input');
+        $response->assertSee('hiddenStartTime');
+        $response->assertSee('hiddenDuration');
+    }
 }

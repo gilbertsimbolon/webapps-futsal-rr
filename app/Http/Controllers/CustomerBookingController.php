@@ -54,13 +54,28 @@ class CustomerBookingController extends Controller
         // Ambil slot dinamis untuk tanggal terpilih
         $slots = JadwalDinamisService::generateSlotsForDate($field->id, $selectedDate);
 
+        // Date pills untuk pemilihan tanggal interaktif (10 hari ke depan)
+        $datePills = [];
+        $todayCarbon = Carbon::today();
+        for ($i = 0; $i < 10; $i++) {
+            $dateObj = $todayCarbon->copy()->addDays($i);
+            $datePills[] = [
+                'date'        => $dateObj->toDateString(),
+                'day_name'    => $i === 0 ? 'Hari Ini' : ($i === 1 ? 'Besok' : $dateObj->translatedFormat('D')),
+                'day_number'  => $dateObj->format('d'),
+                'month_name'  => $dateObj->translatedFormat('M'),
+                'formatted'   => $dateObj->translatedFormat('l, d F Y'),
+            ];
+        }
+
         return view('customer.booking.create', compact(
             'field',
             'paymentMethods',
             'selectedDate',
             'selectedTime',
             'selectedDuration',
-            'slots'
+            'slots',
+            'datePills'
         ));
     }
 
