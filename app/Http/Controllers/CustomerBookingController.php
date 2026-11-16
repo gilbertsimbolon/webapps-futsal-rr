@@ -54,17 +54,63 @@ class CustomerBookingController extends Controller
         // Ambil slot dinamis untuk tanggal terpilih
         $slots = JadwalDinamisService::generateSlotsForDate($field->id, $selectedDate);
 
-        // Date pills untuk pemilihan tanggal interaktif (10 hari ke depan)
+        // Date pills untuk pemilihan tanggal interaktif (10 hari ke depan) dalam Bahasa Indonesia
         $datePills = [];
         $todayCarbon = Carbon::today();
+        $indoDays = [
+            'Sunday'    => 'Minggu',
+            'Monday'    => 'Senin',
+            'Tuesday'   => 'Selasa',
+            'Wednesday' => 'Rabu',
+            'Thursday'  => 'Kamis',
+            'Friday'    => 'Jumat',
+            'Saturday'  => 'Sabtu',
+        ];
+        $indoMonthsShort = [
+            1 => 'Jan',
+            2 => 'Feb',
+            3 => 'Mar',
+            4 => 'Apr',
+            5 => 'Mei',
+            6 => 'Jun',
+            7 => 'Jul',
+            8 => 'Agu',
+            9 => 'Sep',
+            10 => 'Okt',
+            11 => 'Nov',
+            12 => 'Des'
+        ];
+        $indoMonthsFull = [
+            1 => 'Januari',
+            2 => 'Februari',
+            3 => 'Maret',
+            4 => 'April',
+            5 => 'Mei',
+            6 => 'Juni',
+            7 => 'Juli',
+            8 => 'Agustus',
+            9 => 'September',
+            10 => 'Oktober',
+            11 => 'November',
+            12 => 'Desember'
+        ];
+
         for ($i = 0; $i < 10; $i++) {
             $dateObj = $todayCarbon->copy()->addDays($i);
+            $dayEnglish = $dateObj->format('l');
+            $dayIndo = $indoDays[$dayEnglish] ?? $dayEnglish;
+            $monthNum = (int) $dateObj->format('n');
+            $monthShort = $indoMonthsShort[$monthNum] ?? $dateObj->format('M');
+            $monthFull = $indoMonthsFull[$monthNum] ?? $dateObj->format('F');
+
+            $dayLabel = $i === 0 ? 'Hari Ini' : ($i === 1 ? 'Besok' : $dayIndo);
+
             $datePills[] = [
                 'date'        => $dateObj->toDateString(),
-                'day_name'    => $i === 0 ? 'Hari Ini' : ($i === 1 ? 'Besok' : $dateObj->translatedFormat('D')),
+                'day_name'    => $dayLabel,
                 'day_number'  => $dateObj->format('d'),
-                'month_name'  => $dateObj->translatedFormat('M'),
-                'formatted'   => $dateObj->translatedFormat('l, d F Y'),
+                'month_name'  => $monthShort,
+                'formatted'   => $dayIndo . ', ' . $dateObj->format('d') . ' ' . $monthFull . ' ' . $dateObj->format('Y'),
             ];
         }
 
@@ -178,7 +224,7 @@ class CustomerBookingController extends Controller
             'payment_type'      => $validated['payment_type'],
             'payment_method_id' => $paymentMethod->id,
             'status'            => 'pending',
-            'payment_deadline'  => Carbon::now()->addMinutes(30),
+            'payment_deadline'  => Carbon::now()->addMinutes(5),
             'notes'             => $validated['notes'] ?? null,
         ]);
 
@@ -238,4 +284,3 @@ class CustomerBookingController extends Controller
         return back()->with('success', 'Bukti pembayaran berhasil diunggah! Pengelola venue akan memverifikasi pembayaran Anda.');
     }
 }
-

@@ -390,6 +390,16 @@ document.addEventListener('DOMContentLoaded', function () {
     let selectedStartTime = '';
     let selectedDuration = 0;
 
+    const INDO_DAYS = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    const INDO_MONTHS = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+    function formatIndoFull(dateStr) {
+        const parts = dateStr.split('-');
+        if (parts.length !== 3) return dateStr;
+        const d = new Date(parts[0], parts[1] - 1, parts[2]);
+        return `${INDO_DAYS[d.getDay()]}, ${d.getDate()} ${INDO_MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+    }
+
     function rupiah(num) {
         return 'Rp ' + Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
@@ -510,10 +520,8 @@ document.addEventListener('DOMContentLoaded', function () {
             const date = this.value;
             if (!date) return;
 
-            const parts = date.split('-');
-            const d = new Date(parts[0], parts[1] - 1, parts[2]);
-            const formatted = d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-            if (detailActiveDateBadge) detailActiveDateBadge.textContent = formatted;
+            // Update badge text dalam Bahasa Indonesia
+            if (detailActiveDateBadge) detailActiveDateBadge.textContent = formatIndoFull(date);
 
             const pillBtns = document.querySelectorAll('#detailDatePillsContainer .date-pill-btn');
             pillBtns.forEach(b => {

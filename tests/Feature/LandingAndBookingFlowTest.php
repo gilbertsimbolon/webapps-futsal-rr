@@ -240,5 +240,16 @@ class LandingAndBookingFlowTest extends TestCase
         $response->assertSee('slot-check-input');
         $response->assertSee('hiddenStartTime');
         $response->assertSee('hiddenDuration');
+
+        // Pastikan nama hari dalam Bahasa Indonesia
+        $response->assertSee('Hari Ini');
+        $response->assertSee('Besok');
+        $response->assertDontSee('Monday');
+        $response->assertDontSee('Tuesday');
+        $response->assertDontSee('Wednesday');
+        $response->assertDontSee('Thursday');
+        $response->assertDontSee('Friday');
+        $response->assertDontSee('Saturday');
+        $response->assertDontSee('Sunday');
     }
 }

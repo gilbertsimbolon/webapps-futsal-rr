@@ -526,6 +526,24 @@ document.addEventListener('DOMContentLoaded', function () {
     const mobileAmountDue = document.getElementById('mobileAmountDue');
     const mobileSummaryText = document.getElementById('mobileSummaryText');
 
+    const INDO_DAYS = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    const INDO_MONTHS = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+    const INDO_MONTHS_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+
+    function formatIndoFull(dateStr) {
+        const parts = dateStr.split('-');
+        if (parts.length !== 3) return dateStr;
+        const d = new Date(parts[0], parts[1] - 1, parts[2]);
+        return `${INDO_DAYS[d.getDay()]}, ${d.getDate()} ${INDO_MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+    }
+
+    function formatIndoShort(dateStr) {
+        const parts = dateStr.split('-');
+        if (parts.length !== 3) return dateStr;
+        const d = new Date(parts[0], parts[1] - 1, parts[2]);
+        return `${d.getDate()} ${INDO_MONTHS_SHORT[d.getMonth()]} ${d.getFullYear()}`;
+    }
+
     function rupiah(num) {
         return 'Rp ' + Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
@@ -551,11 +569,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Tanggal
         if (inputBookingDate && inputBookingDate.value) {
-            const parts = inputBookingDate.value.split('-');
-            if (parts.length === 3) {
-                const d = new Date(parts[0], parts[1] - 1, parts[2]);
-                summaryDateLabel.textContent = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
-            }
+            summaryDateLabel.textContent = formatIndoShort(inputBookingDate.value);
         } else {
             summaryDateLabel.textContent = '-';
         }
@@ -717,11 +731,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (inputBookingDate) inputBookingDate.value = date;
 
-            // Update badge text
-            const parts = date.split('-');
-            const d = new Date(parts[0], parts[1] - 1, parts[2]);
-            const formatted = d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-            if (activeDateDisplayBadge) activeDateDisplayBadge.textContent = formatted;
+            // Update badge text dalam Bahasa Indonesia
+            if (activeDateDisplayBadge) activeDateDisplayBadge.textContent = formatIndoFull(date);
 
             // Highlight corresponding pill if exists
             const pillBtns = document.querySelectorAll('.date-pill-btn');
