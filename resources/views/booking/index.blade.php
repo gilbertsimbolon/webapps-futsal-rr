@@ -306,6 +306,24 @@
                                     )
                             );
 
+                        $now = \Carbon\Carbon::now();
+                        $bookingDateStr = $booking->booking_date instanceof \Carbon\Carbon ? $booking->booking_date->format('Y-m-d') : substr((string) $booking->booking_date, 0, 10);
+                        $startCarbon = \Carbon\Carbon::parse($bookingDateStr . ' ' . $booking->start_time);
+                        $endCarbon = \Carbon\Carbon::parse($bookingDateStr . ' ' . $booking->end_time);
+
+                        $durationMinutes = $startCarbon->diffInMinutes($endCarbon);
+                        if ($durationMinutes <= 0) $durationMinutes = 60;
+
+                        // Toleransi kehadiran: DP 50% = 50% durasi (1 jam = 30 mnt, 2 jam = 60 mnt)
+                        // Lunas 100% = 100% durasi main
+                        $toleranceRatio = ($booking->status === 'paid' && $booking->payment_type === 'full') ? 1.0 : 0.5;
+                        $toleranceMinutes = (int) round($durationMinutes * $toleranceRatio);
+                        $forfeitDeadline = $startCarbon->copy()->addMinutes($toleranceMinutes);
+
+                        $isGameStarted = $now->greaterThanOrEqualTo($startCarbon);
+                        $isForfeited = $now->greaterThanOrEqualTo($forfeitDeadline);
+                        $hasCheckedIn = !empty($booking->check_in_at);
+
                     @endphp
 
                     <tr>
@@ -503,99 +521,101 @@
                         </td>
 
 
-                        {{-- STATUS --}}
+                        {{-- STATUS & KEHADIRAN --}}
                         <td>
 
-                            @if ($booking->status === 'paid')
+                            @if ($booking->status === 'pending')
 
-                                @if ($booking->check_in_at)
-
-                                    <span class="badge bg-label-success">
-
-                                        <i class="bx bx-check-double me-1"></i>
-
-                                        Sedang Main (Hadir)
-
+                                @if ($booking->payment_proof)
+                                    <span class="badge bg-label-warning mb-1">
+                                        <i class="bx bx-loader-alt me-1"></i>
+                                        Menunggu Verifikasi DP
                                     </span>
-
                                 @else
-
-                                    <span class="badge bg-label-primary">
-
-                                        <i class="bx bx-check me-1"></i>
-
-                                        Lunas 100%
-
+                                    <span class="badge bg-label-secondary mb-1">
+                                        <i class="bx bx-time me-1"></i>
+                                        Menunggu Bayar DP
                                     </span>
-
                                 @endif
 
-                            @elseif ($booking->status === 'confirmed')
+                                {{-- Validasi / Konfirmasi DP oleh Pemilik --}}
+                                <div class="d-flex align-items-center gap-1 mt-1">
+                                    <form id="formConfirmDp{{ $booking->id }}" action="{{ route('pemilik.bookings.confirm-dp', $booking->id) }}" method="POST" class="d-inline m-0">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="button" class="btn btn-xs btn-success py-1 px-2 fw-semibold btn-confirm-dp" data-form="formConfirmDp{{ $booking->id }}" data-code="{{ $booking->booking_code }}" title="Terima & Konfirmasi DP">
+                                            <i class="bx bx-check me-1"></i>Terima DP
+                                        </button>
+                                    </form>
+                                    <button type="button" class="btn btn-xs btn-outline-danger py-1 px-2" data-bs-toggle="modal" data-bs-target="#modalRejectBooking{{ $booking->id }}" title="Tolak">
+                                        <i class="bx bx-x"></i>
+                                    </button>
+                                </div>
 
-                                @if ($booking->check_in_at)
+                            @elseif (in_array($booking->status, ['confirmed', 'paid']))
 
-                                    <span class="badge bg-label-warning">
-
-                                        <i class="bx bx-time-five me-1"></i>
-
-                                        Main (Belum Lunas 50%)
-
+                                @if ($booking->status === 'paid')
+                                    <span class="badge bg-label-primary mb-1">
+                                        <i class="bx bx-check me-1"></i>
+                                        Lunas 100%
                                     </span>
-
                                 @else
-
-                                    <span class="badge bg-label-info">
-
+                                    <span class="badge bg-label-info mb-1">
                                         <i class="bx bx-wallet me-1"></i>
-
                                         DP 50% Masuk
-
                                     </span>
+                                @endif
 
+                                {{-- Status Kehadiran & Timer Countdown Toleransi --}}
+                                @if ($hasCheckedIn)
+                                    <br>
+                                    <span class="badge bg-label-success mt-1">
+                                        <i class="bx bx-check-double me-1"></i>
+                                        Hadir ({{ $booking->check_in_at->format('H:i') }} WITA)
+                                    </span>
+                                @elseif (!$isGameStarted)
+                                    {{-- Belum mulai main: tombol hadir dihilangkan --}}
+                                    <div class="small text-muted mt-1" style="font-size: 11px;">
+                                        <i class="bx bx-time-five me-1"></i>Mulai {{ $startTime }} WITA
+                                    </div>
+                                    <small class="text-secondary d-block" style="font-size: 10px;">
+                                        Toleransi: {{ $toleranceMinutes }} mnt saat main
+                                    </small>
+                                @elseif ($isGameStarted && !$isForfeited)
+                                    {{-- Waktu main sudah mulai: tampilkan tombol hadir & timer countdown --}}
+                                    <div class="mt-1 d-flex flex-column align-items-start gap-1">
+                                        <form action="{{ route('pemilik.bookings.check-in', $booking->id) }}" method="POST" class="d-inline m-0">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit" class="btn btn-xs btn-success fw-bold py-1 px-2 shadow-sm" title="Klik saat tim telah hadir di lapangan">
+                                                <i class="bx bx-user-check me-1"></i>Tandai Hadir
+                                            </button>
+                                        </form>
+                                        <div class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-2 py-1 attendance-countdown mt-1"
+                                            data-deadline="{{ $forfeitDeadline->toIso8601String() }}"
+                                            style="font-size: 11px;">
+                                            <i class="bx bx-stopwatch me-1"></i><span class="timer-display">Menghitung...</span>
+                                        </div>
+                                    </div>
+                                @else
+                                    <br>
+                                    <span class="badge bg-label-danger mt-1">
+                                        <i class="bx bx-x-circle me-1"></i>Hangus (Tidak Hadir)
+                                    </span>
                                 @endif
 
                             @elseif ($booking->status === 'completed')
 
                                 <span class="badge bg-label-info">
-
                                     <i class="bx bx-flag me-1"></i>
-
                                     Selesai Main
-
                                 </span>
-
-                            @elseif ($booking->status === 'pending')
-
-                                @if ($booking->payment_proof)
-
-                                    <span class="badge bg-label-warning">
-
-                                        <i class="bx bx-loader-alt me-1"></i>
-
-                                        Menunggu Verifikasi DP
-
-                                    </span>
-
-                                @else
-
-                                    <span class="badge bg-label-secondary">
-
-                                        <i class="bx bx-time me-1"></i>
-
-                                        Menunggu Bayar DP
-
-                                    </span>
-
-                                @endif
 
                             @else
 
                                 <span class="badge bg-label-danger">
-
                                     <i class="bx bx-x me-1"></i>
-
                                     Batal / Hangus
-
                                 </span>
 
                             @endif
@@ -607,36 +627,6 @@
                         <td class="text-center">
 
                             <div class="d-inline-flex gap-1">
-
-                                {{-- CHECK-IN --}}
-                                @if (
-                                    in_array(
-                                        $booking->status,
-                                        ['paid', 'confirmed']
-                                    )
-                                    && empty($booking->check_in_at)
-                                )
-
-                                    <form
-                                        action="{{ route('pemilik.bookings.check-in', $booking->id) }}"
-                                        method="POST"
-                                        class="d-inline m-0"
-                                    >
-
-                                        @csrf
-                                        @method('PATCH')
-
-                                        <button
-                                            type="submit"
-                                            class="btn btn-icon btn-sm btn-success"
-                                            title="Check-In Pemain (Mulai Main)"
-                                        >
-                                            <i class="bx bx-user-check"></i>
-                                        </button>
-
-                                    </form>
-
-                                @endif
 
 
                                 {{-- POS --}}
@@ -845,6 +835,8 @@
 
     @include('booking.modals.hapus')
 
+    @include('booking.modals.reject')
+
 @endforeach
 
 
@@ -857,6 +849,88 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     'use strict';
+
+    /* =========================================================
+       COUNTDOWN TOLERANSI KEHADIRAN (CHECK-IN)
+    ========================================================= */
+    function updateAttendanceCountdowns() {
+        const timerEls = document.querySelectorAll('.attendance-countdown');
+        const now = new Date();
+
+        timerEls.forEach(el => {
+            const deadlineAttr = el.getAttribute('data-deadline');
+            if (!deadlineAttr) return;
+
+            const deadline = new Date(deadlineAttr);
+            const diffMs = deadline - now;
+            const displaySpan = el.querySelector('.timer-display');
+
+            if (diffMs <= 0) {
+                if (displaySpan) displaySpan.textContent = 'Waktu Habis';
+                el.className = 'badge bg-danger text-white rounded-pill px-2 py-1 mt-1';
+                const form = el.closest('td')?.querySelector('form[action*="check-in"]');
+                if (form) form.classList.add('d-none');
+            } else {
+                const totalSec = Math.floor(diffMs / 1000);
+                const mins = Math.floor(totalSec / 60);
+                const secs = totalSec % 60;
+                const formatted = String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+                if (displaySpan) displaySpan.textContent = 'Sisa ' + formatted;
+            }
+        });
+    }
+
+    updateAttendanceCountdowns();
+    setInterval(updateAttendanceCountdowns, 1000);
+
+    /* =========================================================
+       SWEETALERT CONFIRM DP & REJECT
+    ========================================================= */
+    document.querySelectorAll('.btn-confirm-dp').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const formId = this.getAttribute('data-form');
+            const code = this.getAttribute('data-code');
+            Swal.fire({
+                title: 'Konfirmasi DP / Pembayaran',
+                text: `Apakah Anda yakin ingin memverifikasi penerimaan pembayaran untuk booking ${code}?`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#696cff',
+                cancelButtonColor: '#8592a3',
+                confirmButtonText: 'Ya, Terima',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const form = document.getElementById(formId);
+                    if (form) form.submit();
+                }
+            });
+        });
+    });
+
+    document.querySelectorAll('.btn-reject-dp').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const formId = this.getAttribute('data-form');
+            const code = this.getAttribute('data-code');
+            Swal.fire({
+                title: 'Tolak Booking',
+                text: `Apakah Anda yakin ingin menolak booking ${code}? Status akan diubah menjadi Batal.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ff3e1d',
+                cancelButtonColor: '#8592a3',
+                confirmButtonText: 'Ya, Tolak',
+                cancelButtonText: 'Kembali'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const form = document.getElementById(formId);
+                    if (form) form.submit();
+                }
+            });
+        });
+    });
 
 
     /* =========================================================
@@ -1655,9 +1729,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     !startTimeInput.value
                 ) {
 
-                    alert(
-                        'Mohon lengkapi semua kolom bertanda bintang (*) dan tentukan jam mulai!'
-                    );
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Data Belum Lengkap',
+                        text: 'Mohon lengkapi semua kolom bertanda bintang (*) dan tentukan jam mulai!',
+                        confirmButtonColor: '#696cff'
+                    });
 
                     return;
 
@@ -2135,21 +2212,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     event.preventDefault();
 
-                    alert(
-                        'Silakan pilih metode pembayaran terlebih dahulu.'
-                    );
-
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Pilih Pembayaran',
+                        text: 'Silakan pilih metode pembayaran terlebih dahulu.',
+                        confirmButtonColor: '#696cff'
+                    });
 
                     if (posPaymentMethod) {
-
                         posPaymentMethod.focus();
-
                     }
-
                     return;
-
                 }
-
 
                 /*
                  * PASTIKAN PAYMENT METHOD MASUK
@@ -2157,12 +2231,10 @@ document.addEventListener('DOMContentLoaded', function () {
                  */
                 syncWalkInPaymentMethod();
 
-
                 /*
                  * CASH HARUS MENCAPAI NOMINAL.
                  */
                 if (isCashMethod(posPaymentMethod)) {
-
                     const received =
                         parseFloat(
                             cashReceivedInput
@@ -2170,23 +2242,19 @@ document.addEventListener('DOMContentLoaded', function () {
                                 : 0
                         );
 
-
                     if (received < calculatedCharge) {
-
                         event.preventDefault();
-
-                        alert(
-                            'Uang yang diterima masih kurang dari total pembayaran.'
-                        );
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Nominal Kurang',
+                            text: 'Uang yang diterima masih kurang dari total pembayaran.',
+                            confirmButtonColor: '#696cff'
+                        });
 
                         if (cashReceivedInput) {
-
                             cashReceivedInput.focus();
-
                         }
-
                         return;
-
                     }
 
                 }
@@ -2585,33 +2653,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     event.preventDefault();
 
-                    alert(
-                        'Silakan pilih metode pembayaran terlebih dahulu.'
-                    );
-
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Pilih Pembayaran',
+                        text: 'Silakan pilih metode pembayaran terlebih dahulu.',
+                        confirmButtonColor: '#696cff'
+                    });
 
                     if (tablePosMethod) {
-
                         tablePosMethod.focus();
-
                     }
-
                     return;
-
                 }
-
 
                 /*
                  * SYNC KE REQUEST
                  */
                 syncTablePaymentMethod();
 
-
                 /*
                  * VALIDASI CASH
                  */
                 if (isCashMethod(tablePosMethod)) {
-
                     const received =
                         parseFloat(
                             tableCashReceived
@@ -2619,27 +2682,22 @@ document.addEventListener('DOMContentLoaded', function () {
                                 : 0
                         );
 
-
                     if (
                         received <
                         currentTableAmount
                     ) {
-
                         event.preventDefault();
-
-                        alert(
-                            'Uang yang diterima masih kurang dari nominal pembayaran.'
-                        );
-
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Nominal Kurang',
+                            text: 'Uang yang diterima masih kurang dari nominal pembayaran.',
+                            confirmButtonColor: '#696cff'
+                        });
 
                         if (tableCashReceived) {
-
                             tableCashReceived.focus();
-
                         }
-
                         return;
-
                     }
 
                 }

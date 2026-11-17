@@ -667,7 +667,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     window.handleAuthBooking = function () {
         if (!selectedStartTime || selectedDuration < 1) {
-            alert('Silakan centang minimal 1 slot jam bermain yang tersedia terlebih dahulu.');
+            Swal.fire({
+                icon: 'warning',
+                title: 'Pilih Jadwal',
+                text: 'Silakan centang minimal 1 slot jam bermain yang tersedia terlebih dahulu.',
+                confirmButtonColor: '#696cff'
+            });
             return;
         }
 

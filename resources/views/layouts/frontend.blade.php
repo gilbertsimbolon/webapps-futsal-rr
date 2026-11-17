@@ -151,7 +151,13 @@
                 margin-top: 0.75rem;
             }
         }
+
+        .swal2-container {
+            z-index: 2000 !important;
+        }
     </style>
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @stack('styles')
 </head>
 
@@ -257,24 +263,8 @@
         </div>
     </nav>
 
-    <!-- Alert Flash Message -->
-    <div class="container mt-3">
-        @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm rounded-3 d-flex align-items-center" role="alert">
-                <i class="bx bx-check-circle fs-4 me-2 text-success"></i>
-                <div class="flex-grow-1">{{ session('success') }}</div>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm rounded-3 d-flex align-items-center" role="alert">
-                <i class="bx bx-error-circle fs-4 me-2 text-danger"></i>
-                <div class="flex-grow-1">{{ session('error') }}</div>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
-    </div>
+    <!-- Alert Flash Message via SweetAlert2 -->
+    @include('components.alert')
 
     <!-- Main Content -->
     <main class="flex-grow-1">

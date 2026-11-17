@@ -6,7 +6,8 @@
                 <script>
                     document.write(new Date().getFullYear());
                 </script>
-                <a href="https://instagram.com/bolonsite" target="_blank" class="footer-link text-black" style="text-decoration: none;">bolonsite.</a>
+                <a href="https://instagram.com/royngln" target="_blank" class="footer-link text-black"
+                    style="text-decoration: none;">Roy Nainggolan.</a>
             </div>
         </div>
     </div>

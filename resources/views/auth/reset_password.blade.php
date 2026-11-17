@@ -22,15 +22,7 @@
                         <h4 class="mb-1 mt-3 text-center">Buat Password Baru</h4>
                         <p class="mb-6 text-center">Silakan masukkan password baru Anda untuk mengamankan akun.</p>
 
-                        @if ($errors->any())
-                            <div class="alert alert-danger mb-4">
-                                <ul class="mb-0 ps-3">
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
+
 
                         <form id="formAuthentication" class="mb-6" action="{{ route('reset-password.reset') }}" method="POST">
                             @csrf

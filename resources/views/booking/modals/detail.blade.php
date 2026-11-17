@@ -61,7 +61,25 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer border-top py-2">
+            <div class="modal-footer border-top py-2 d-flex justify-content-between">
+                <div>
+                    @if ($booking->status === 'pending')
+                        <form id="formDetailConfirmDp{{ $booking->id }}" action="{{ route('pemilik.bookings.confirm-dp', $booking->id) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('PATCH')
+                            <button type="button" class="btn btn-success me-1 btn-confirm-dp" data-form="formDetailConfirmDp{{ $booking->id }}" data-code="{{ $booking->booking_code }}">
+                                <i class="bx bx-check me-1"></i>Terima DP / Pembayaran
+                            </button>
+                        </form>
+                        <form id="formDetailReject{{ $booking->id }}" action="{{ route('pemilik.bookings.reject', $booking->id) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('PATCH')
+                            <button type="button" class="btn btn-outline-danger btn-reject-dp" data-form="formDetailReject{{ $booking->id }}" data-code="{{ $booking->booking_code }}">
+                                <i class="bx bx-x me-1"></i>Tolak
+                            </button>
+                        </form>
+                    @endif
+                </div>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
             </div>
         </div>

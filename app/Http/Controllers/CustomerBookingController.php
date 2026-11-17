@@ -27,23 +27,14 @@ class CustomerBookingController extends Controller
                 ->with('error', 'Maaf, lapangan ini sedang tidak tersedia untuk dibooking.');
         }
 
-        // Ambil metode pembayaran aktif milik pemilik venue ini
+        // Ambil metode pembayaran aktif non-tunai milik pemilik venue ini untuk pelanggan online
         $ownerId = $field->branch->user_id;
-
-        // Pastikan minimal ada opsi tunai default jika pemilik belum setup
-        PaymentMethod::firstOrCreate(
-            [
-                'user_id' => $ownerId,
-                'type'    => 'cash',
-            ],
-            [
-                'name'   => 'Tunai di Tempat',
-                'status' => 'active',
-            ]
-        );
 
         $paymentMethods = PaymentMethod::where('user_id', $ownerId)
             ->where('status', 'active')
+            ->where('type', '!=', 'cash')
+            ->whereRaw("LOWER(name) NOT LIKE '%tunai%'")
+            ->whereRaw("LOWER(name) NOT LIKE '%cash%'")
             ->get();
 
         // Parameter pra-pilihan dari detail page jika ada
@@ -146,15 +137,18 @@ class CustomerBookingController extends Controller
 
         $field = Field::with('branch')->findOrFail($validated['field_id']);
 
-        // Pastikan metode pembayaran milik pemilik cabang lapangan yang dibooking
+        // Pastikan metode pembayaran milik pemilik cabang lapangan yang dibooking dan bukan tipe tunai
         $paymentMethod = PaymentMethod::where('id', $validated['payment_method_id'])
             ->where('user_id', $field->branch->user_id)
             ->where('status', 'active')
+            ->where('type', '!=', 'cash')
+            ->whereRaw("LOWER(name) NOT LIKE '%tunai%'")
+            ->whereRaw("LOWER(name) NOT LIKE '%cash%'")
             ->first();
 
         if (!$paymentMethod) {
             return back()
-                ->with('error', 'Metode pembayaran tidak valid untuk venue lapangan ini.')
+                ->with('error', 'Metode pembayaran tidak valid atau bukan metode pembayaran transfer/QRIS resmi venue.')
                 ->withInput();
         }
 

@@ -372,7 +372,7 @@
                                                         @elseif ($pm->type === 'bank_transfer')
                                                             <span class="badge bg-label-info text-uppercase">Transfer Bank</span>
                                                         @else
-                                                            <span class="badge bg-label-success text-uppercase">Tunai</span>
+                                                            <span class="badge bg-label-primary text-uppercase">{{ strtoupper($pm->type ?? 'Online') }}</span>
                                                         @endif
                                                     </div>
 
@@ -873,7 +873,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (!startTime || duration < 1) {
             e.preventDefault();
-            alert('Silakan centang minimal 1 slot jadwal bermain yang tersedia.');
+            Swal.fire({
+                icon: 'warning',
+                title: 'Pilih Jadwal',
+                text: 'Silakan centang minimal 1 slot jadwal bermain yang tersedia.',
+                confirmButtonColor: '#696cff'
+            });
             return false;
         }
     });

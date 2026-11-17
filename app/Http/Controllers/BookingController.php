@@ -621,6 +621,35 @@ class BookingController extends Controller
     }
 
     /**
+     * Konfirmasi validasi DP atau Pembayaran oleh pemilik venue.
+     */
+    public function confirmDp(Booking $booking)
+    {
+        $this->authorizeBookingOwner($booking);
+
+        if ($booking->payment_type === 'full') {
+            $booking->update([
+                'status'           => 'paid',
+                'remaining_amount' => 0,
+                'paid_at'          => Carbon::now(),
+            ]);
+            $msg = "Pembayaran lunas untuk booking {$booking->booking_code} berhasil diterima dan diverifikasi!";
+        } else {
+            $dp = $booking->dp_amount > 0 ? $booking->dp_amount : ($booking->total_amount * 0.5);
+            $booking->update([
+                'status'           => 'confirmed',
+                'dp_amount'        => $dp,
+                'remaining_amount' => max(0, $booking->total_amount - $dp),
+            ]);
+            $msg = "Uang Muka (DP 50%) untuk booking {$booking->booking_code} berhasil diterima dan dikonfirmasi!";
+        }
+
+        return redirect()
+            ->route('pemilik.bookings.index')
+            ->with('success', $msg);
+    }
+
+    /**
      * Penolakan pembayaran booking.
      */
     public function reject(
@@ -816,26 +845,19 @@ class BookingController extends Controller
         $activeBookings = $query->get();
 
         foreach ($activeBookings as $booking) {
-            $start = Carbon::parse(
-                $booking->booking_date->format('Y-m-d') .
-                    ' ' .
-                    $booking->start_time
-            );
-
-            $end = Carbon::parse(
-                $booking->booking_date->format('Y-m-d') .
-                    ' ' .
-                    $booking->end_time
-            );
+            $bookingDateStr = $booking->booking_date instanceof Carbon ? $booking->booking_date->format('Y-m-d') : substr((string) $booking->booking_date, 0, 10);
+            $start = Carbon::parse($bookingDateStr . ' ' . $booking->start_time);
+            $end = Carbon::parse($bookingDateStr . ' ' . $booking->end_time);
 
             $durationMinutes = $start->diffInMinutes($end);
+            if ($durationMinutes <= 0) $durationMinutes = 60;
 
-            $halfTimeThreshold = $start->copy()
-                ->addMinutes(
-                    $durationMinutes * 0.5
-                );
+            // Jika DP 50%, batas toleransi = 50% dari durasi main (1 jam = 30 mnt, 2 jam = 60 mnt)
+            // Jika Lunas penuh, batas toleransi = 100% durasi main
+            $ratio = ($booking->status === 'paid' && $booking->payment_type === 'full') ? 1.0 : 0.5;
+            $forfeitThreshold = $start->copy()->addMinutes((int) round($durationMinutes * $ratio));
 
-            if ($now->greaterThanOrEqualTo($halfTimeThreshold)) {
+            if ($now->greaterThanOrEqualTo($forfeitThreshold)) {
 
                 /*
                 |--------------------------------------------------------------------------
@@ -851,7 +873,7 @@ class BookingController extends Controller
                         ? $booking->notes . ' | '
                         : ''
                     ) .
-                        'Hangus otomatis (Tidak hadir setelah 50% durasi main berjalan)',
+                        'Hangus otomatis (Tim tidak hadir dalam batas toleransi ' . ($ratio * 100) . '% durasi bermain)',
                 ]);
 
                 /*

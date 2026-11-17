@@ -283,7 +283,13 @@ document.addEventListener('DOMContentLoaded', function () {
         const acc = document.getElementById('accNumber');
         if (acc) {
             navigator.clipboard.writeText(acc.textContent.trim());
-            alert('Nomor rekening berhasil disalin!');
+            Swal.fire({
+                icon: 'success',
+                title: 'Disalin!',
+                text: 'Nomor rekening berhasil disalin ke clipboard.',
+                timer: 1500,
+                showConfirmButton: false
+            });
         }
     };
 });

@@ -296,6 +296,9 @@ Route::middleware('auth')->group(function () {
             Route::patch('/bookings/{booking}/pay', [BookingController::class, 'processPayment'])
                 ->name('bookings.pay');
 
+            Route::patch('/bookings/{booking}/confirm-dp', [BookingController::class, 'confirmDp'])
+                ->name('bookings.confirm-dp');
+
             Route::patch('/bookings/{booking}/check-in', [BookingController::class, 'checkIn'])
                 ->name('bookings.check-in');
 

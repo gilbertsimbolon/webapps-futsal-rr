@@ -23,10 +23,18 @@
                         <p class="mb-4 text-center text-muted small">Silakan masuk ke akun Anda untuk melanjutkan.</p>
 
                         @if (isset($returnTo) && $returnTo)
-                            <div class="alert alert-warning border-0 shadow-sm d-flex align-items-center mb-4 py-2 px-3 small" role="alert">
-                                <i class="bx bx-info-circle fs-4 me-2 text-warning"></i>
-                                <div>Silakan masuk terlebih dahulu untuk melakukan booking.</div>
-                            </div>
+                            @push('scripts')
+                            <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                Swal.fire({
+                                    icon: 'info',
+                                    title: 'Masuk Diperlukan',
+                                    text: 'Silakan masuk terlebih dahulu untuk melakukan booking.',
+                                    confirmButtonColor: '#696cff'
+                                });
+                            });
+                            </script>
+                            @endpush
                         @endif
 
                         <form id="formAuthentication" class="mb-4" action="{{ route('login.store') }}" method="POST">
